@@ -1,0 +1,307 @@
+@import '../styles/clamp';
+
+.chartContainer {
+  margin-top: 24px;
+}
+
+.chartHeader {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.chartTitle {
+  @include fluid-font-size(18, 20, 320, 1200, 'px');
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.chartSubtitle {
+  @include fluid-font-size(14, 16, 320, 1200, 'px');
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.chartWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding: 8px;
+}
+
+.chart {
+  max-width: 100%;
+  height: auto;
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  
+  // Ensure text is readable in both light and dark modes
+  color: var(--text-primary);
+}
+
+// Grid styles
+.gridLines {
+  opacity: 0.3;
+}
+
+.gridLine {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.gridLabel {
+  fill: var(--text-secondary);
+  font-size: 11px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+// Main curve styles
+.mainCurve {
+  stroke-width: 3;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+// Key points (min/max boundaries)
+.keyPoint {
+  stroke-width: 2;
+  stroke: var(--bg-primary);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.keyPointmin {
+  fill: var(--error);
+}
+
+.keyPointmax {
+  fill: var(--success);
+}
+
+.keyLine {
+  stroke-width: 2;
+  opacity: 0.6;
+}
+
+.keyLinemin {
+  stroke: var(--error);
+}
+
+.keyLinemax {
+  stroke: var(--success);
+}
+
+.keyLabel {
+  fill: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.keyLabelmin {
+  fill: var(--error);
+}
+
+.keyLabelmax {
+  fill: var(--success);
+}
+
+// Breakpoint markers
+.breakpointMarker {
+  cursor: pointer;
+  transition: var(--transition);
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.markerPoint {
+  stroke-width: 2;
+  stroke: var(--bg-primary);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.markermin {
+  fill: var(--error);
+}
+
+.markermax {
+  fill: var(--success);
+}
+
+.markerfluid {
+  fill: var(--accent-primary);
+}
+
+// Axes
+.axis {
+  stroke: var(--text-primary);
+  stroke-width: 2;
+}
+
+.axisLabel {
+  fill: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+// Legend
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  @include fluid-padding(12, 16, 320, 1200, 'px');
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  @include fluid-font-size(13, 14, 320, 1200, 'px');
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.legendColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.legendMin {
+  background: var(--error);
+}
+
+.legendFluid {
+  background: var(--accent-primary);
+}
+
+.legendMax {
+  background: var(--success);
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .chartWrapper {
+    padding: 4px;
+  }
+
+  .chart {
+    width: 100%;
+    min-width: 500px; // Ensure chart doesn't get too small
+  }
+
+  .legend {
+    gap: 16px;
+    padding: 12px;
+  }
+
+  .legendItem {
+    font-size: 12px;
+  }
+
+  .legendColor {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .legend {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .chartTitle {
+    font-size: 16px;
+  }
+
+  .chartSubtitle {
+    font-size: 13px;
+  }
+}
+
+// Dark mode specific adjustments
+@media (prefers-color-scheme: dark) {
+  .chart {
+    // Ensure SVG elements are visible in dark mode
+    .gridLabel,
+    .keyLabel,
+    .axisLabel {
+      fill: var(--text-secondary);
+    }
+
+    .axis {
+      stroke: var(--text-secondary);
+    }
+
+    .gridLine {
+      stroke: var(--text-muted);
+    }
+  }
+
+  .mainCurve {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  .keyPoint,
+  .markerPoint {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .gridLines {
+    opacity: 0.6;
+  }
+
+  .mainCurve {
+    stroke-width: 4;
+  }
+
+  .keyPoint,
+  .markerPoint {
+    stroke-width: 3;
+  }
+
+  .keyLine {
+    stroke-width: 3;
+    opacity: 0.8;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .breakpointMarker {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .chart {
+    border: 1px solid #000;
+    background: white;
+  }
+
+  .legend {
+    background: white;
+    border: 1px solid #000;
+  }
+}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import styles from './ClampGenerator.module.scss';
+import ClampChart from './ClampChart';
 
 /**
  * URL parameter utilities
@@ -449,6 +450,11 @@ const ClampGenerator = () => {
               <pre className={styles.codeBlock}>
                 <code>{outputs.scssFunction}</code>
               </pre>
+            </div>
+
+            {/* Visual Chart */}
+            <div className={styles.outputGroup}>
+              <ClampChart formData={formData} outputs={outputs} />
             </div>
 
             {/* Breakpoint Table */}
