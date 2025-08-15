@@ -1,0 +1,546 @@
+@import '../styles/clamp';
+
+// CSS Custom Properties for theming
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --border-color: #dee2e6;
+  --border-focus: #0d6efd;
+  --accent-primary: #0d6efd;
+  --accent-hover: #0b5ed7;
+  --success: #198754;
+  --error: #dc3545;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --shadow-hover: rgba(0, 0, 0, 0.15);
+  --radius: 8px;
+  --radius-sm: 4px;
+  --transition: all 0.2s ease;
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #404040;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #808080;
+    --border-color: #404040;
+    --border-focus: #4dabf7;
+    --accent-primary: #4dabf7;
+    --accent-hover: #339af0;
+    --success: #51cf66;
+    --error: #ff6b6b;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(0, 0, 0, 0.4);
+  }
+}
+
+.container {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  @include fluid-padding(16, 32, 320, 1200, 'px');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.card {
+  background: var(--bg-primary);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 6px var(--shadow);
+  @include fluid-prop(width, 320, 800, 320, 1200, 'px');
+  max-width: 100%;
+  transition: var(--transition);
+
+  &:hover {
+    box-shadow: 0 8px 25px var(--shadow-hover);
+  }
+}
+
+.header {
+  @include fluid-padding(24, 32, 320, 1200, 'px');
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.title {
+  @include fluid-font-size(24, 32, 320, 1200, 'px');
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  @include fluid-font-size(14, 16, 320, 1200, 'px');
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.form {
+  @include fluid-padding(24, 32, 320, 1200, 'px');
+}
+
+.fieldGroup {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.label {
+  display: block;
+  @include fluid-font-size(14, 16, 320, 1200, 'px');
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.input {
+  width: 100%;
+  @include fluid-padding(10, 12, 320, 1200, 'px');
+  @include fluid-font-size(14, 16, 320, 1200, 'px');
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: var(--transition);
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+  }
+
+  &:hover:not(:focus) {
+    border-color: var(--text-muted);
+  }
+
+  &.inputError {
+    border-color: var(--error);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    }
+  }
+}
+
+.radioGroup {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  @include fluid-font-size(14, 16, 320, 1200, 'px');
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+
+  &:hover {
+    color: var(--accent-primary);
+  }
+}
+
+.radio {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.resetButton {
+  @include fluid-padding(10, 12, 320, 1200, 'px');
+  @include fluid-font-size(14, 16, 320, 1200, 'px');
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+  min-width: 140px;
+
+  &:hover {
+    background: var(--border-color);
+    border-color: var(--text-muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.error {
+  display: block;
+  @include fluid-font-size(12, 14, 320, 1200, 'px');
+  color: var(--error);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.outputs {
+  border-top: 1px solid var(--border-color);
+  @include fluid-padding(24, 32, 320, 1200, 'px');
+}
+
+.outputsTitle {
+  @include fluid-font-size(20, 24, 320, 1200, 'px');
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 20px 0;
+  line-height: 1.3;
+}
+
+.outputGroup {
+  margin-bottom: 24px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.outputHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.outputLabel {
+  @include fluid-font-size(16, 18, 320, 1200, 'px');
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.copyButton {
+  @include fluid-padding(6, 8, 320, 1200, 'px');
+  @include fluid-font-size(12, 14, 320, 1200, 'px');
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+  min-width: 60px;
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.codeBlock {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  @include fluid-padding(12, 16, 320, 1200, 'px');
+  overflow-x: auto;
+  margin: 0;
+
+  code {
+    @include fluid-font-size(13, 14, 320, 1200, 'px');
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas',
+      'Courier New', monospace;
+    color: var(--text-primary);
+    white-space: pre;
+    line-height: 1.5;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .container {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+
+  .outputHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .copyButton {
+    align-self: flex-end;
+  }
+}
+
+// Focus visible for better accessibility
+.input:focus-visible,
+.radio:focus-visible,
+.resetButton:focus-visible,
+.copyButton:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --text-secondary: #000000;
+  }
+
+  .input,
+  .resetButton {
+    border-width: 2px;
+  }
+}
+
+// Table styles for breakpoint preview
+.tableContainer {
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
+
+.breakpointTable {
+  width: 100%;
+  border-collapse: collapse;
+  @include fluid-font-size(14, 16, 320, 1200, 'px');
+
+  th, td {
+    @include fluid-padding(12, 16, 320, 1200, 'px');
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  th {
+    background: var(--bg-secondary);
+    font-weight: 600;
+    color: var(--text-primary);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  tbody tr {
+    transition: var(--transition);
+
+    &:hover {
+      background: var(--bg-secondary);
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+// Row status colors
+.rowmin {
+  background: rgba(220, 53, 69, 0.05);
+  
+  &:hover {
+    background: rgba(220, 53, 69, 0.1);
+  }
+}
+
+.rowmax {
+  background: rgba(25, 135, 84, 0.05);
+  
+  &:hover {
+    background: rgba(25, 135, 84, 0.1);
+  }
+}
+
+.rowfluid {
+  background: rgba(13, 110, 253, 0.05);
+  
+  &:hover {
+    background: rgba(13, 110, 253, 0.1);
+  }
+}
+
+// Cell styles
+.deviceCell {
+  min-width: 180px;
+}
+
+.deviceInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.deviceIcon {
+  @include fluid-font-size(18, 20, 320, 1200, 'px');
+  flex-shrink: 0;
+}
+
+.deviceName {
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.deviceModel {
+  @include fluid-font-size(12, 14, 320, 1200, 'px');
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
+
+.widthCell {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas',
+    'Courier New', monospace;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.valueCell {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas',
+    'Courier New', monospace;
+}
+
+.computedValue {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.statusCell {
+  text-align: center;
+}
+
+.statusBadge {
+  display: inline-block;
+  @include fluid-padding(4, 6, 320, 1200, 'px');
+  @include fluid-font-size(11, 12, 320, 1200, 'px');
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+}
+
+.statusmin {
+  background: var(--error);
+  color: white;
+}
+
+.statusmax {
+  background: var(--success);
+  color: white;
+}
+
+.statusfluid {
+  background: var(--accent-primary);
+  color: white;
+}
+
+// Dark mode adjustments for table
+@media (prefers-color-scheme: dark) {
+  .rowmin {
+    background: rgba(255, 107, 107, 0.1);
+    
+    &:hover {
+      background: rgba(255, 107, 107, 0.15);
+    }
+  }
+
+  .rowmax {
+    background: rgba(81, 207, 102, 0.1);
+    
+    &:hover {
+      background: rgba(81, 207, 102, 0.15);
+    }
+  }
+
+  .rowfluid {
+    background: rgba(77, 171, 247, 0.1);
+    
+    &:hover {
+      background: rgba(77, 171, 247, 0.15);
+    }
+  }
+}
+
+// Responsive table adjustments
+@media (max-width: 768px) {
+  .tableContainer {
+    font-size: 14px;
+  }
+
+  .breakpointTable {
+    th, td {
+      padding: 8px 12px;
+    }
+  }
+
+  .deviceInfo {
+    gap: 8px;
+  }
+
+  .deviceIcon {
+    font-size: 16px;
+  }
+
+  .statusBadge {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

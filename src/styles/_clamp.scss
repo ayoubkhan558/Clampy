@@ -1,0 +1,95 @@
+/**
+ * Fluid Clamp Utilities
+ * Generates CSS clamp() values for responsive typography and spacing
+ */
+
+/**
+ * Calculate fluid clamp value
+ * @param {number} $min-size - Minimum size value
+ * @param {number} $max-size - Maximum size value
+ * @param {number} $min-screen - Minimum screen width in px
+ * @param {number} $max-screen - Maximum screen width in px
+ * @param {string} $unit - Output unit ('px' or 'rem')
+ * @param {number} $root-size - Root font size for rem calculations (default: 16)
+ * @returns {string} CSS clamp() value
+ */
+@function fluid-clamp(
+  $min-size,
+  $max-size,
+  $min-screen,
+  $max-screen,
+  $unit: 'px',
+  $root-size: 16
+) {
+  // Convert to appropriate units
+  $min-value: if($unit == 'rem', $min-size / $root-size, $min-size);
+  $max-value: if($unit == 'rem', $max-size / $root-size, $max-size);
+  
+  // Calculate slope and intercept
+  $slope: ($max-size - $min-size) / ($max-screen - $min-screen);
+  $intercept: $min-size - ($slope * $min-screen);
+  
+  // Convert intercept to appropriate unit
+  $intercept-value: if($unit == 'rem', $intercept / $root-size, $intercept);
+  
+  // Build the fluid calculation
+  $fluid-calc: calc(#{$slope * 100}vw + #{$intercept-value}#{$unit});
+  
+  @return clamp(#{$min-value}#{$unit}, #{$fluid-calc}, #{$max-value}#{$unit});
+}
+
+/**
+ * Apply fluid clamp to a CSS property
+ * @param {string} $property - CSS property name
+ * @param {number} $min-size - Minimum size value
+ * @param {number} $max-size - Maximum size value
+ * @param {number} $min-screen - Minimum screen width in px
+ * @param {number} $max-screen - Maximum screen width in px
+ * @param {string} $unit - Output unit ('px' or 'rem')
+ * @param {number} $root-size - Root font size for rem calculations (default: 16)
+ */
+@mixin fluid-prop(
+  $property,
+  $min-size,
+  $max-size,
+  $min-screen,
+  $max-screen,
+  $unit: 'px',
+  $root-size: 16
+) {
+  #{$property}: fluid-clamp($min-size, $max-size, $min-screen, $max-screen, $unit, $root-size);
+}
+
+/**
+ * Common fluid typography mixins
+ */
+@mixin fluid-font-size($min, $max, $min-screen: 320, $max-screen: 1200, $unit: 'rem', $root: 16) {
+  @include fluid-prop(font-size, $min, $max, $min-screen, $max-screen, $unit, $root);
+}
+
+@mixin fluid-margin($min, $max, $min-screen: 320, $max-screen: 1200, $unit: 'rem', $root: 16) {
+  @include fluid-prop(margin, $min, $max, $min-screen, $max-screen, $unit, $root);
+}
+
+@mixin fluid-padding($min, $max, $min-screen: 320, $max-screen: 1200, $unit: 'rem', $root: 16) {
+  @include fluid-prop(padding, $min, $max, $min-screen, $max-screen, $unit, $root);
+}
+
+/**
+ * Example usage:
+ * 
+ * // Function usage
+ * .title {
+ *   font-size: fluid-clamp(24, 48, 320, 1200, 'px');
+ * }
+ * 
+ * // Mixin usage
+ * .heading {
+ *   @include fluid-font-size(1.5, 3, 320, 1200, 'rem', 16);
+ * }
+ * 
+ * // Generic property mixin
+ * .container {
+ *   @include fluid-prop(padding, 16, 32, 320, 1200, 'px');
+ * }
+ */
