@@ -1,14 +1,28 @@
+@use './variables' as v;
+
+/**
+ * Strip units from a value
+ * @param {number} $number - The number to strip units from
+ * @return {number} The unitless number
+ */
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
+}
+
 /**
  * Fluid Clamp Utilities
- * Generates CSS clamp() values for responsive typography and spacing
+ * Generates CSS clamp() values for responsive typography and spacing using design system breakpoints
  */
 
 /**
  * Calculate fluid clamp value
- * @param {number} $min-size - Minimum size value
- * @param {number} $max-size - Maximum size value
- * @param {number} $min-screen - Minimum screen width in px
- * @param {number} $max-screen - Maximum screen width in px
+ * @param {number} $min-size - Minimum size value (unitless for rem, with unit for px)
+ * @param {number} $max-size - Maximum size value (unitless for rem, with unit for px)
+ * @param {number} $min-breakpoint - Minimum breakpoint key or value (default: 'sm')
+ * @param {number} $max-breakpoint - Maximum breakpoint key or value (default: 'xl')
  * @param {string} $unit - Output unit ('px' or 'rem')
  * @param {number} $root-size - Root font size for rem calculations (default: 16)
  * @returns {string} CSS clamp() value
@@ -16,20 +30,30 @@
 @function fluid-clamp(
   $min-size,
   $max-size,
-  $min-screen,
-  $max-screen,
-  $unit: 'px',
+  $min-breakpoint: 'sm',
+  $max-breakpoint: 'xl',
+  $unit: 'rem',
   $root-size: 16
 ) {
-  // Convert to appropriate units
-  $min-value: if($unit == 'rem', $min-size / $root-size, $min-size);
-  $max-value: if($unit == 'rem', $max-size / $root-size, $max-size);
+  // Get breakpoint values from map or use as-is if numeric
+  $min-bp: if(type-of($min-breakpoint) == 'string', map-get(('sm': v.$breakpoint-sm, 'md': v.$breakpoint-md, 'lg': v.$breakpoint-lg, 'xl': v.$breakpoint-xl, '2xl': v.$breakpoint-2xl), $min-breakpoint), $min-breakpoint);
+  $max-bp: if(type-of($max-breakpoint) == 'string', map-get(('sm': v.$breakpoint-sm, 'md': v.$breakpoint-md, 'lg': v.$breakpoint-lg, 'xl': v.$breakpoint-xl, '2xl': v.$breakpoint-2xl), $max-breakpoint), $max-breakpoint);
   
-  // Calculate slope and intercept
-  $slope: ($max-size - $min-size) / ($max-screen - $min-screen);
-  $intercept: $min-size - ($slope * $min-screen);
+  // Convert to numbers for calculations
+  $min-bp-num: strip-unit($min-bp);
+  $max-bp-num: strip-unit($max-bp);
   
-  // Convert intercept to appropriate unit
+  // Convert sizes to numbers if they have units
+  $min-size-num: if(unitless($min-size), $min-size, strip-unit($min-size));
+  $max-size-num: if(unitless($max-size), $max-size, strip-unit($max-size));
+  
+  // Calculate slope and intercept with explicit unit stripping
+  $slope: (strip-unit($max-size-num) - strip-unit($min-size-num)) / (strip-unit($max-bp-num) - strip-unit($min-bp-num));
+  $intercept: strip-unit($min-size-num) - ($slope * strip-unit($min-bp-num));
+  
+  // Convert to rem if needed
+  $min-value: if($unit == 'rem', $min-size-num / $root-size, $min-size-num);
+  $max-value: if($unit == 'rem', $max-size-num / $root-size, $max-size-num);
   $intercept-value: if($unit == 'rem', $intercept / $root-size, $intercept);
   
   // Build the fluid calculation
@@ -43,8 +67,8 @@
  * @param {string} $property - CSS property name
  * @param {number} $min-size - Minimum size value
  * @param {number} $max-size - Maximum size value
- * @param {number} $min-screen - Minimum screen width in px
- * @param {number} $max-screen - Maximum screen width in px
+ * @param {string|number} $min-breakpoint - Minimum breakpoint key or value (default: 'sm')
+ * @param {string|number} $max-breakpoint - Maximum breakpoint key or value (default: 'xl')
  * @param {string} $unit - Output unit ('px' or 'rem')
  * @param {number} $root-size - Root font size for rem calculations (default: 16)
  */
@@ -52,44 +76,63 @@
   $property,
   $min-size,
   $max-size,
-  $min-screen,
-  $max-screen,
-  $unit: 'px',
+  $min-breakpoint: 'sm',
+  $max-breakpoint: 'xl',
+  $unit: 'rem',
   $root-size: 16
 ) {
-  #{$property}: fluid-clamp($min-size, $max-size, $min-screen, $max-screen, $unit, $root-size);
+  #{$property}: fluid-clamp($min-size, $max-size, $min-breakpoint, $max-breakpoint, $unit, $root-size);
 }
 
 /**
- * Common fluid typography mixins
+ * Common fluid typography mixins using design system breakpoints
  */
-@mixin fluid-font-size($min, $max, $min-screen: 320, $max-screen: 1200, $unit: 'rem', $root: 16) {
-  @include fluid-prop(font-size, $min, $max, $min-screen, $max-screen, $unit, $root);
+
+// Fluid font size with design system breakpoints
+@mixin fluid-font-size($min, $max, $min-breakpoint: 'sm', $max-breakpoint: 'xl', $unit: 'rem', $root: 16) {
+  @include fluid-prop(font-size, $min, $max, $min-breakpoint, $max-breakpoint, $unit, $root);
+  
+  // Ensure good font rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-@mixin fluid-margin($min, $max, $min-screen: 320, $max-screen: 1200, $unit: 'rem', $root: 16) {
-  @include fluid-prop(margin, $min, $max, $min-screen, $max-screen, $unit, $root);
+// Fluid spacing mixins
+@mixin fluid-margin($min, $max, $min-breakpoint: 'sm', $max-breakpoint: 'xl', $unit: 'rem', $root: 16) {
+  @include fluid-prop(margin, $min, $max, $min-breakpoint, $max-breakpoint, $unit, $root);
 }
 
-@mixin fluid-padding($min, $max, $min-screen: 320, $max-screen: 1200, $unit: 'rem', $root: 16) {
-  @include fluid-prop(padding, $min, $max, $min-screen, $max-screen, $unit, $root);
+@mixin fluid-padding($min, $max, $min-breakpoint: 'sm', $max-breakpoint: 'xl', $unit: 'rem', $root: 16) {
+  @include fluid-prop(padding, $min, $max, $min-breakpoint, $max-breakpoint, $unit, $root);
+}
+
+// Fluid gap (for flex/grid layouts)
+@mixin fluid-gap($min, $max, $min-breakpoint: 'sm', $max-breakpoint: 'xl', $unit: 'rem', $root: 16) {
+  @include fluid-prop(gap, $min, $max, $min-breakpoint, $max-breakpoint, $unit, $root);
+}
+
+// Fluid border radius
+@mixin fluid-border-radius($min, $max, $min-breakpoint: 'sm', $max-breakpoint: 'xl', $unit: 'rem', $root: 16) {
+  @include fluid-prop(border-radius, $min, $max, $min-breakpoint, $max-breakpoint, $unit, $root);
 }
 
 /**
  * Example usage:
  * 
- * // Function usage
+ * // Using breakpoint keys (recommended)
  * .title {
- *   font-size: fluid-clamp(24, 48, 320, 1200, 'px');
+ *   @include fluid-font-size(1.5, 3); // Uses 'sm' to 'xl' breakpoints by default
+ *   @include fluid-margin(1, 2, 'md', 'xl'); // Custom breakpoints
  * }
  * 
- * // Mixin usage
- * .heading {
- *   @include fluid-font-size(1.5, 3, 320, 1200, 'rem', 16);
+ * // Using pixel values directly
+ * .subtitle {
+ *   @include fluid-font-size(16px, 24px, 320px, 1200px, 'px');
  * }
  * 
- * // Generic property mixin
+ * // Using the function directly
  * .container {
- *   @include fluid-prop(padding, 16, 32, 320, 1200, 'px');
+ *   padding: fluid-clamp(1, 2, 'sm', 'lg');
  * }
  */
