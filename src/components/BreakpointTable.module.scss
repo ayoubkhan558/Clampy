@@ -163,14 +163,18 @@
 
 .actionsCell {
   text-align: center;
-  width: 60px;
+  width: 80px;
 }
 
-.deleteButton {
+.actionButtons {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.actionButton {
   @include fluid-padding(4, 6, 320, 1200, 'px');
-  background: var(--error);
-  color: var(--error-foreground);
-  border: 1px solid var(--error);
+  border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: var(--transition-base);
@@ -179,20 +183,89 @@
   justify-content: center;
   width: 28px;
   height: 28px;
-
-  &:hover {
-    background: var(--color-error-600);
-    border-color: var(--color-error-600);
-  }
-
+  
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--color-error-500 / 0.2);
+    box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
   }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
 
-  .buttonIcon {
-    width: 14px;
-    height: 14px;
+.editButton {
+  background: var(--accent-primary);
+  color: var(--accent-foreground);
+  
+  &:hover:not(:disabled) {
+    background: var(--accent-hover);
+    transform: scale(1.1);
+  }
+}
+
+.saveButton {
+  background: var(--success);
+  color: var(--success-foreground);
+  
+  &:hover:not(:disabled) {
+    background: var(--color-success-600);
+    transform: scale(1.1);
+  }
+}
+
+.cancelButton {
+  background: var(--warning);
+  color: var(--warning-foreground);
+  
+  &:hover:not(:disabled) {
+    background: var(--color-warning-600);
+    transform: scale(1.1);
+  }
+}
+
+.deleteButton {
+  background: var(--error);
+  color: var(--error-foreground);
+  
+  &:hover:not(:disabled) {
+    background: var(--color-error-600);
+    transform: scale(1.1);
+  }
+}
+
+.buttonIcon {
+  width: 14px;
+  height: 14px;
+}
+
+// Edit input styles
+.editFields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.editInput {
+  width: 100%;
+  @include fluid-padding(6, 8, 320, 1200, 'px');
+  @include fluid-font-size(13, 14, 320, 1200, 'px');
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: var(--transition-base);
+  font-family: inherit;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
+  }
+  
+  &::placeholder {
+    color: var(--text-muted);
   }
 }
 
@@ -247,11 +320,33 @@
     padding: 3px 6px;
     font-size: 10px;
   }
+  
+  .actionsCell {
+    width: 70px;
+  }
+  
+  .actionButton {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .buttonIcon {
+    width: 12px;
+    height: 12px;
+  }
 }
 
 // Reduced motion support
 @media (prefers-reduced-motion: reduce) {
   .breakpointTable tbody tr {
     transition: none;
+  }
+  
+  .actionButton {
+    transition: none;
+    
+    &:hover {
+      transform: none;
+    }
   }
 }

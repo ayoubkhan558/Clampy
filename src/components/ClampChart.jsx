@@ -138,7 +138,8 @@ const ClampChart = ({ formData, outputs }) => {
         value: bp.computedValue,
         status: bp.status,
         name: bp.name,
-        device: bp.device
+        device: bp.device,
+        id: bp.id
       };
     });
 
@@ -148,13 +149,17 @@ const ClampChart = ({ formData, outputs }) => {
         x: scaleX(minScreenNum),
         y: scaleY(outputUnit === 'rem' ? minSizeNum / rootSizeNum : minSizeNum),
         label: `Min: ${minScreenNum}px`,
-        type: 'min'
+        type: 'min',
+        screen: minScreenNum,
+        value: outputUnit === 'rem' ? minSizeNum / rootSizeNum : minSizeNum
       },
       {
         x: scaleX(maxScreenNum),
         y: scaleY(outputUnit === 'rem' ? maxSizeNum / rootSizeNum : maxSizeNum),
         label: `Max: ${maxScreenNum}px`,
-        type: 'max'
+        type: 'max',
+        screen: maxScreenNum,
+        value: outputUnit === 'rem' ? maxSizeNum / rootSizeNum : maxSizeNum
       }
     ];
 
@@ -173,7 +178,9 @@ const ClampChart = ({ formData, outputs }) => {
       minScreen,
       maxScreen,
       scaledMinValue,
-      scaledMaxValue
+      scaledMaxValue,
+      scaleX,
+      scaleY
     };
   }, [formData, outputs.breakpointTable]);
 
@@ -272,12 +279,6 @@ const ClampChart = ({ formData, outputs }) => {
             {/* Key boundary points */}
             {chartData.keyPoints.map((point, index) => (
               <g key={`key-point-${index}`}>
-                <circle
-                  cx={point.x}
-                  cy={point.y}
-                  r="6"
-                  className={`${styles.keyPoint} ${styles[`keyPoint${point.type}`]}`}
-                />
                 <line
                   x1={point.x}
                   y1={point.y}
@@ -285,6 +286,12 @@ const ClampChart = ({ formData, outputs }) => {
                   y2={chartData.plotHeight}
                   className={`${styles.keyLine} ${styles[`keyLine${point.type}`]}`}
                   strokeDasharray="4,4"
+                />
+                <circle
+                  cx={point.x}
+                  cy={point.y}
+                  r="6"
+                  className={`${styles.keyPoint} ${styles[`keyPoint${point.type}`]}`}
                 />
                 <text
                   x={point.x}
@@ -363,6 +370,10 @@ const ClampChart = ({ formData, outputs }) => {
         <div className={styles.legendItem}>
           <div className={`${styles.legendColor} ${styles.legendMax}`}></div>
           <span>Maximum Value</span>
+        </div>
+        <div className={styles.legendItem}>
+          <div className={`${styles.legendColor} ${styles.legendBreakpoint}`}></div>
+          <span>Breakpoints</span>
         </div>
       </div>
     </div>

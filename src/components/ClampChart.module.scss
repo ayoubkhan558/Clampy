@@ -38,8 +38,6 @@
   background: var(--bg-primary);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-primary);
-  
-  // Ensure text is readable in both light and dark modes
   color: var(--text-primary);
 }
 
@@ -56,7 +54,7 @@
 .gridLabel {
   fill: var(--text-secondary);
   font-size: 11px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: var(--font-family-sans);
 }
 
 // Main curve styles
@@ -97,7 +95,7 @@
   fill: var(--text-primary);
   font-size: 12px;
   font-weight: 600;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: var(--font-family-sans);
 }
 
 .keyLabelmin {
@@ -111,11 +109,6 @@
 // Breakpoint markers
 .breakpointMarker {
   cursor: pointer;
-  transition: var(--transition-base);
-
-  &:hover {
-    transform: scale(1.2);
-  }
 }
 
 .markerPoint {
@@ -146,7 +139,7 @@
   fill: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: var(--font-family-sans);
 }
 
 // Legend
@@ -190,6 +183,11 @@
   background: var(--success);
 }
 
+.legendBreakpoint {
+  background: var(--accent-primary);
+  border: 2px dashed var(--accent-primary);
+}
+
 // Responsive adjustments
 @media (max-width: 768px) {
   .chartWrapper {
@@ -198,7 +196,7 @@
 
   .chart {
     width: 100%;
-    min-width: 500px; // Ensure chart doesn't get too small
+    min-width: 500px;
   }
 
   .legend {
@@ -235,7 +233,6 @@
 // Dark mode specific adjustments
 @media (prefers-color-scheme: dark) {
   .chart {
-    // Ensure SVG elements are visible in dark mode
     .gridLabel,
     .keyLabel,
     .axisLabel {
@@ -279,17 +276,6 @@
   .keyLine {
     stroke-width: 3;
     opacity: 0.8;
-  }
-}
-
-// Reduced motion support
-@media (prefers-reduced-motion: reduce) {
-  .breakpointMarker {
-    transition: none;
-
-    &:hover {
-      transform: none;
-    }
   }
 }
 

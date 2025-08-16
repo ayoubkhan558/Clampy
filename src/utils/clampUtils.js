@@ -152,18 +152,25 @@ const generateBreakpointTable = (data, customBreakpoints, slope, intercept, minS
 
   // Default breakpoints
   const defaultBreakpoints = [
-    { name: 'Mobile S', width: 320, device: 'iPhone SE', category: 'mobile', isDefault: true },
-    { name: 'Mobile M', width: 375, device: 'iPhone 12/13', category: 'mobile', isDefault: true },
-    { name: 'Mobile L', width: 425, device: 'iPhone 12 Pro Max', category: 'mobile', isDefault: true },
-    { name: 'Tablet', width: 768, device: 'iPad', category: 'tablet', isDefault: true },
-    { name: 'Laptop', width: 1024, device: 'Laptop', category: 'desktop', isDefault: true },
-    { name: 'Laptop L', width: 1440, device: 'MacBook Pro 16"', category: 'desktop', isDefault: true },
-    { name: 'Desktop', width: 1920, device: 'Desktop HD', category: 'desktop', isDefault: true },
-    { name: 'Desktop L', width: 2560, device: 'Desktop QHD', category: 'desktop', isDefault: true }
+    { name: 'Mobile S', width: 320, device: 'iPhone SE', category: 'mobile', isDefault: true, id: 'mobile-s' },
+    { name: 'Mobile M', width: 375, device: 'iPhone 12/13', category: 'mobile', isDefault: true, id: 'mobile-m' },
+    { name: 'Mobile L', width: 425, device: 'iPhone 12 Pro Max', category: 'mobile', isDefault: true, id: 'mobile-l' },
+    { name: 'Tablet', width: 768, device: 'iPad', category: 'tablet', isDefault: true, id: 'tablet' },
+    { name: 'Laptop', width: 1024, device: 'Laptop', category: 'desktop', isDefault: true, id: 'laptop' },
+    { name: 'Laptop L', width: 1440, device: 'MacBook Pro 16"', category: 'desktop', isDefault: true, id: 'laptop-l' },
+    { name: 'Desktop', width: 1920, device: 'Desktop HD', category: 'desktop', isDefault: true, id: 'desktop' },
+    { name: 'Desktop L', width: 2560, device: 'Desktop QHD', category: 'desktop', isDefault: true, id: 'desktop-l' }
   ];
 
-  // Combine default and custom breakpoints
-  const allBreakpoints = [...defaultBreakpoints, ...customBreakpoints].sort((a, b) => a.width - b.width);
+  // Filter out default breakpoints that have been edited (replaced by custom ones)
+  const editedDefaultIds = customBreakpoints
+    .filter(bp => bp.originalId)
+    .map(bp => bp.originalId);
+
+  const uneditedDefaults = defaultBreakpoints.filter(bp => !editedDefaultIds.includes(bp.id));
+
+  // Combine unedited defaults and custom breakpoints
+  const allBreakpoints = [...uneditedDefaults, ...customBreakpoints].sort((a, b) => a.width - b.width);
 
   return allBreakpoints.map(bp => {
     let computedValue;

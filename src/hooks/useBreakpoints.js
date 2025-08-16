@@ -20,6 +20,39 @@ export const useBreakpoints = () => {
   };
 
   /**
+   * Update breakpoint (handles both custom and default breakpoints)
+   */
+  const handleUpdateBreakpoint = (id, data) => {
+    setCustomBreakpoints(prev => {
+      // Check if this is a custom breakpoint
+      const existingCustom = prev.find(bp => bp.id === id);
+      
+      if (existingCustom) {
+        // Update existing custom breakpoint
+        return prev.map(bp => {
+          if (bp.id === id) {
+            return {
+              ...bp,
+              name: data.name,
+              width: data.width,
+              device: data.device
+            };
+          }
+          return bp;
+        });
+      } else {
+        // This is a default breakpoint being edited for the first time
+        // Create a new custom breakpoint with the updated data
+        const newCustomBp = createCustomBreakpoint({
+          ...data,
+          originalId: id // Keep track of the original default breakpoint
+        });
+        return [...prev, newCustomBp];
+      }
+    });
+  };
+
+  /**
    * Delete custom breakpoint
    */
   const handleDeleteBreakpoint = (id) => {
@@ -44,6 +77,7 @@ export const useBreakpoints = () => {
     customBreakpoints,
     showAddBreakpoint,
     handleAddBreakpoint,
+    handleUpdateBreakpoint,
     handleDeleteBreakpoint,
     toggleAddBreakpoint,
     hideAddBreakpoint

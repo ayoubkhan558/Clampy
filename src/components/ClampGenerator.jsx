@@ -7,7 +7,6 @@ import {
   HiClipboard,
   HiChartBar,
   HiPlus,
-  HiTrash,
   HiTableCells
 } from 'react-icons/hi2';
 
@@ -119,7 +118,7 @@ const BreakpointForm = ({
 
 /**
  * Main ClampGenerator Component
- * Generates CSS clamp() values and SCSS fluid-clamp for fluid responsive design
+ * Generates CSS clamp() values and SCSS utilities for fluid responsive design
  */
 const ClampGenerator = () => {
   // Custom hooks
@@ -145,6 +144,7 @@ const ClampGenerator = () => {
     showAddBreakpoint,
     handleAddBreakpoint,
     handleDeleteBreakpoint,
+    handleUpdateBreakpoint,
     toggleAddBreakpoint,
     hideAddBreakpoint
   } = useBreakpoints();
@@ -182,7 +182,7 @@ const ClampGenerator = () => {
         <div className={styles.leftColumn}>
           <div className={styles.formCard}>
             <header className={styles.header}>
-              <h1 className={styles.title}>Clampy </h1>
+              <h1 className={styles.title}>Clampy</h1>
               <p className={styles.subtitle}>
                 Generate fluid responsive values with CSS clamp() and SCSS fluid-clamp
               </p>
@@ -381,6 +381,7 @@ const ClampGenerator = () => {
                       <BreakpointTable
                         breakpointTable={outputs.breakpointTable}
                         onDeleteBreakpoint={handleDeleteBreakpoint}
+                        onUpdateBreakpoint={handleUpdateBreakpoint}
                       />
                     </div>
                   )}
