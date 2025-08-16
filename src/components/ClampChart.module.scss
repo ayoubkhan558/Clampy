@@ -268,6 +268,86 @@
   border: 2px dashed var(--accent-primary);
 }
 
+// Hover functionality styles
+.chartWrapper {
+  position: relative;
+}
+
+.hoverElements {
+  pointer-events: none;
+}
+
+.hoverLine {
+  stroke: var(--accent-primary);
+  stroke-width: 2;
+  stroke-dasharray: 2,2;
+  opacity: 0.8;
+}
+
+.hoverPoint {
+  fill: var(--accent-primary);
+  stroke: var(--bg-primary);
+  stroke-width: 3;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.tooltip {
+  position: fixed;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 12px;
+  z-index: 1000;
+  pointer-events: none;
+  font-size: 13px;
+  min-width: 160px;
+  backdrop-filter: blur(8px);
+  
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 10px;
+    min-width: 140px;
+  }
+}
+
+.tooltipContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tooltipRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.tooltipLabel {
+  color: var(--text-secondary);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.tooltipValue {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
+.statusmin {
+  color: var(--error);
+}
+
+.statusmax {
+  color: var(--success);
+}
+
+.statusfluid {
+  color: var(--accent-primary);
+}
+
 // Dark mode specific adjustments
 @media (prefers-color-scheme: dark) {
   .chart {
@@ -284,5 +364,11 @@
     .gridLine {
       stroke: var(--text-muted);
     }
+  }
+  
+  .tooltip {
+    background: var(--bg-primary);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-lg);
   }
 }

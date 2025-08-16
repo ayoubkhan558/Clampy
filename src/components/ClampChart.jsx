@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import styles from './ClampChart.module.scss';
 import { formatNumber } from '../utils/clampUtils';
 
@@ -7,6 +7,8 @@ import { formatNumber } from '../utils/clampUtils';
  * Visualizes how clamp values change across different screen sizes
  */
 const ClampChart = ({ formData, outputs }) => {
+  const [hoverData, setHoverData] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const chartData = useMemo(() => {
     if (!formData || !outputs.breakpointTable || outputs.breakpointTable.length === 0) {
       return null;
@@ -180,9 +182,45 @@ const ClampChart = ({ formData, outputs }) => {
       scaledMinValue,
       scaledMaxValue,
       scaleX,
-      scaleY
+      scaleY,
+      outputUnit: formData.outputUnit
     };
   }, [formData, outputs]);
+
+  const handleMouseMove = useCallback((event) => {
+    if (!chartData) return;
+    
+    const svgRect = event.currentTarget.getBoundingClientRect();
+    const mouseX = event.clientX - svgRect.left - chartData.padding.left;
+    const mouseY = event.clientY - svgRect.top - chartData.padding.top;
+    
+    // Check if mouse is within plot area
+    if (mouseX >= 0 && mouseX <= chartData.plotWidth && mouseY >= 0 && mouseY <= chartData.plotHeight) {
+      // Convert mouse X position to screen width
+      const screenWidth = chartData.minScreen + (mouseX / chartData.plotWidth) * (chartData.maxScreen - chartData.minScreen);
+      
+      // Find the corresponding value from data points
+      const closestPoint = chartData.dataPoints.reduce((prev, curr) => {
+        return Math.abs(curr.screen - screenWidth) < Math.abs(prev.screen - screenWidth) ? curr : prev;
+      });
+      
+      setHoverData({
+        screenWidth: Math.round(screenWidth),
+        value: closestPoint.value,
+        x: mouseX,
+        y: mouseY,
+        status: closestPoint.status
+      });
+      
+      setMousePosition({ x: event.clientX, y: event.clientY });
+    } else {
+      setHoverData(null);
+    }
+  }, [chartData]);
+  
+  const handleMouseLeave = useCallback(() => {
+    setHoverData(null);
+  }, []);
 
   if (!chartData) {
     return null;
@@ -200,6 +238,8 @@ const ClampChart = ({ formData, outputs }) => {
           height={chartData.chartHeight}
           viewBox={`0 0 ${chartData.chartWidth} ${chartData.chartHeight}`}
           className={styles.chart}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
         >
           <defs>
             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -301,6 +341,25 @@ const ClampChart = ({ formData, outputs }) => {
               </g>
             ))}
 
+            {/* Hover line and indicator */}
+            {hoverData && (
+              <g className={styles.hoverElements}>
+                <line
+                  x1={hoverData.x}
+                  y1={0}
+                  x2={hoverData.x}
+                  y2={chartData.plotHeight}
+                  className={styles.hoverLine}
+                />
+                <circle
+                  cx={hoverData.x}
+                  cy={chartData.scaleY(hoverData.value)}
+                  r="5"
+                  className={styles.hoverPoint}
+                />
+              </g>
+            )}
+
             {/* Breakpoint markers */}
             {chartData.breakpointMarkers.map((marker, index) => (
               <g key={`marker-${index}`} className={styles.breakpointMarker}>
@@ -352,6 +411,34 @@ const ClampChart = ({ formData, outputs }) => {
             </text>
           </g>
         </svg>
+        
+        {/* Hover tooltip */}
+        {hoverData && (
+          <div 
+            className={styles.tooltip}
+            style={{
+              left: mousePosition.x + 10,
+              top: mousePosition.y - 10
+            }}
+          >
+            <div className={styles.tooltipContent}>
+              <div className={styles.tooltipRow}>
+                <span className={styles.tooltipLabel}>Width:</span>
+                <span className={styles.tooltipValue}>{hoverData.screenWidth}px</span>
+              </div>
+              <div className={styles.tooltipRow}>
+                <span className={styles.tooltipLabel}>Size:</span>
+                <span className={styles.tooltipValue}>{formatNumber(hoverData.value)}{chartData.outputUnit}</span>
+              </div>
+              <div className={styles.tooltipRow}>
+                <span className={styles.tooltipLabel}>Status:</span>
+                <span className={`${styles.tooltipValue} ${styles[`status${hoverData.status}`]}`}>
+                  {hoverData.status === 'min' ? 'Minimum' : hoverData.status === 'max' ? 'Maximum' : 'Fluid'}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Legend */}
