@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import styles from './ClampChart.module.scss';
+import { formatNumber } from '../utils/clampUtils';
 
 /**
  * ClampChart Component
@@ -36,7 +37,7 @@ const ClampChart = ({ formData, outputs }) => {
     const screenRange = maxScreenNum - minScreenNum;
     const stepSize = Math.max(10, screenRange / 100); // At least 100 points for smooth curve
 
-    for (let screen = 200; screen <= 3000; screen += stepSize) {
+    for (let screen = 200; screen <= maxScreenNum + 200; screen += stepSize) {
       let value;
       let status;
       
