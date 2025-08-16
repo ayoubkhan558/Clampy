@@ -24,7 +24,7 @@
 
 .chartSubtitle {
   @include fluid-font-size(14, 16, 320, 1200, 'px');
-  color: var(--text-secondary);
+  color: var(--text-primary);
   margin: 0;
   line-height: 1.4;
 
@@ -50,7 +50,6 @@
   height: auto;
   background: var(--bg-primary);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-primary);
   color: var(--text-primary);
 
   @media (max-width: 768px) {
@@ -79,7 +78,7 @@
 }
 
 .gridLabel {
-  fill: var(--text-secondary);
+  fill: var(--text-primary);
   font-size: 11px;
   font-family: var(--font-family-sans);
 }
@@ -275,11 +274,11 @@
     .gridLabel,
     .keyLabel,
     .axisLabel {
-      fill: var(--text-secondary);
+      fill: var(--text-primary);
     }
 
     .axis {
-      stroke: var(--text-secondary);
+      stroke: var(--text-primary);
     }
 
     .gridLine {

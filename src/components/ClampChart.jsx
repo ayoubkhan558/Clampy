@@ -8,7 +8,7 @@ import { formatNumber } from '../utils/clampUtils';
  */
 const ClampChart = ({ formData, outputs }) => {
   const chartData = useMemo(() => {
-    if (!outputs.breakpointTable || outputs.breakpointTable.length === 0) {
+    if (!formData || !outputs.breakpointTable || outputs.breakpointTable.length === 0) {
       return null;
     }
 
@@ -182,7 +182,7 @@ const ClampChart = ({ formData, outputs }) => {
       scaleX,
       scaleY
     };
-  }, [formData, outputs.breakpointTable]);
+  }, [formData, outputs]);
 
   if (!chartData) {
     return null;

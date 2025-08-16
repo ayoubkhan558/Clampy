@@ -28,7 +28,7 @@ const getDeviceIcon = (category) => {
 
 /**
  * Breakpoint Table Component
- * Displays a table of breakpoints with device information and computed values
+ * Displays a table of breakpoints with device information and Values
  */
 const BreakpointTable = ({ breakpointTable, onDeleteBreakpoint, onUpdateBreakpoint }) => {
   const [editingId, setEditingId] = useState(null);
@@ -79,8 +79,8 @@ const BreakpointTable = ({ breakpointTable, onDeleteBreakpoint, onUpdateBreakpoi
         <thead>
           <tr>
             <th>Device</th>
-            <th>Screen Width</th>
-            <th>Computed Value</th>
+            <th>Widh</th>
+            <th>Value</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
