@@ -4,7 +4,8 @@ import {
   DEVICE_THRESHOLDS, 
   DEVICE_CATEGORIES, 
   DEVICE_ICONS,
-  URL_PARAMS 
+  URL_PARAMS,
+  SCALING_FUNCTIONS 
 } from './constants';
 
 /**
@@ -19,7 +20,11 @@ export const getUrlParams = () => {
     minSize: parseFloat(params.get(URL_PARAMS.MIN)) || DEFAULT_FORM_VALUES.minSize,
     maxSize: parseFloat(params.get(URL_PARAMS.MAX)) || DEFAULT_FORM_VALUES.maxSize,
     minScreenWidth: parseFloat(params.get(URL_PARAMS.MIN_SCREEN)) || DEFAULT_FORM_VALUES.minScreenWidth,
-    maxScreenWidth: parseFloat(params.get(URL_PARAMS.MAX_SCREEN)) || DEFAULT_FORM_VALUES.maxScreenWidth
+    maxScreenWidth: parseFloat(params.get(URL_PARAMS.MAX_SCREEN)) || DEFAULT_FORM_VALUES.maxScreenWidth,
+    scalingFunction: params.get(URL_PARAMS.SCALING) || DEFAULT_FORM_VALUES.scalingFunction,
+    customBezier: params.get(URL_PARAMS.BEZIER) || DEFAULT_FORM_VALUES.customBezier,
+    generateCustomProperties: params.get(URL_PARAMS.CUSTOM_PROPS) === 'true',
+    customPropertyName: params.get(URL_PARAMS.PROP_NAME) || DEFAULT_FORM_VALUES.customPropertyName
   };
 };
 
@@ -35,6 +40,10 @@ export const updateUrlParams = (formData) => {
   params.set(URL_PARAMS.MAX, formData.maxSize.toString());
   params.set(URL_PARAMS.MIN_SCREEN, formData.minScreenWidth.toString());
   params.set(URL_PARAMS.MAX_SCREEN, formData.maxScreenWidth.toString());
+  params.set(URL_PARAMS.SCALING, formData.scalingFunction);
+  params.set(URL_PARAMS.BEZIER, formData.customBezier);
+  params.set(URL_PARAMS.CUSTOM_PROPS, formData.generateCustomProperties.toString());
+  params.set(URL_PARAMS.PROP_NAME, formData.customPropertyName);
   
   const newUrl = `${window.location.pathname}?${params.toString()}`;
   window.history.replaceState({}, '', newUrl);
@@ -54,6 +63,10 @@ export const generateShareUrl = (formData) => {
   params.set(URL_PARAMS.MAX, formData.maxSize.toString());
   params.set(URL_PARAMS.MIN_SCREEN, formData.minScreenWidth.toString());
   params.set(URL_PARAMS.MAX_SCREEN, formData.maxScreenWidth.toString());
+  params.set(URL_PARAMS.SCALING, formData.scalingFunction);
+  params.set(URL_PARAMS.BEZIER, formData.customBezier);
+  params.set(URL_PARAMS.CUSTOM_PROPS, formData.generateCustomProperties.toString());
+  params.set(URL_PARAMS.PROP_NAME, formData.customPropertyName);
   
   return `${currentUrl}?${params.toString()}`;
 };
@@ -84,7 +97,11 @@ export const calculateClamp = (data, customBreakpoints = []) => {
     minSize,
     maxSize,
     minScreenWidth,
-    maxScreenWidth
+    maxScreenWidth,
+    scalingFunction = 'linear',
+    customBezier = '0.25, 0.1, 0.25, 1',
+    generateCustomProperties = false,
+    customPropertyName = 'font-size'
   } = data;
 
   // Convert to numbers
@@ -112,23 +129,43 @@ export const calculateClamp = (data, customBreakpoints = []) => {
   const minFormatted = formatNumber(minValue);
   const maxFormatted = formatNumber(maxValue);
 
-  // Build CSS clamp
-  const fluidCalc = `calc(${slopePercent}vw + ${interceptFormatted}${outputUnit})`;
-  const cssClamp = `clamp(${minFormatted}${outputUnit}, ${fluidCalc}, ${maxFormatted}${outputUnit})`;
+  // Build CSS clamp with scaling function support
+  let fluidCalc, cssClamp, cssCustomProperties = '';
+  const bezierValues = scalingFunction === 'custom' ? customBezier : getBezierForFunction(scalingFunction);
+  
+  // For now, CSS clamp() doesn't support easing functions directly
+  // We'll generate the linear clamp but add comments about the intended easing
+  fluidCalc = `calc(${slopePercent}vw + ${interceptFormatted}${outputUnit})`;
+  cssClamp = `clamp(${minFormatted}${outputUnit}, ${fluidCalc}, ${maxFormatted}${outputUnit})`;
+  
+  if (scalingFunction !== 'linear') {
+    cssClamp = `/* Scaling function: ${scalingFunction} (${bezierValues}) */\n/* Note: CSS clamp() uses linear interpolation. For true easing, consider CSS animations or JavaScript. */\n${cssClamp}`;
+  }
 
-  // Generate breakpoint table data
+  // Generate CSS custom properties if requested
+  if (generateCustomProperties) {
+    const propName = customPropertyName || 'font-size';
+    cssCustomProperties = generateCustomPropertiesCSS(propName, cssClamp, data);
+  }
+
+  // Generate breakpoint table data with scaling function
   const breakpointTable = generateBreakpointTable(
     data, 
     customBreakpoints, 
     slope, 
     intercept, 
     minScreenNum, 
-    maxScreenNum
+    maxScreenNum,
+    scalingFunction,
+    bezierValues
   );
 
   return {
     cssClamp,
-    breakpointTable
+    cssCustomProperties,
+    breakpointTable,
+    scalingFunction,
+    bezierValues: scalingFunction !== 'linear' ? (scalingFunction === 'custom' ? customBezier : getBezierForFunction(scalingFunction)) : null
   };
 };
 
@@ -140,9 +177,11 @@ export const calculateClamp = (data, customBreakpoints = []) => {
  * @param {number} intercept - Calculated intercept
  * @param {number} minScreenNum - Minimum screen width
  * @param {number} maxScreenNum - Maximum screen width
+ * @param {string} scalingFunction - Scaling function type
+ * @param {string} bezierValues - Bezier curve values
  * @returns {Array} Breakpoint table data
  */
-const generateBreakpointTable = (data, customBreakpoints, slope, intercept, minScreenNum, maxScreenNum) => {
+const generateBreakpointTable = (data, customBreakpoints, slope, intercept, minScreenNum, maxScreenNum, scalingFunction = 'linear', bezierValues = null) => {
   const { outputUnit, rootFontSize } = data;
   const rootSizeNum = parseFloat(rootFontSize);
 
@@ -181,9 +220,19 @@ const generateBreakpointTable = (data, customBreakpoints, slope, intercept, minS
       computedValue = maxValue;
       status = 'max';
     } else {
-      // Calculate fluid value
-      const fluidValue = slope * bp.width + intercept;
-      computedValue = outputUnit === 'rem' ? fluidValue / rootSizeNum : fluidValue;
+      // Calculate fluid value with easing
+      const minSizeValue = parseFloat(data.minSize);
+      const maxSizeValue = parseFloat(data.maxSize);
+      const easedValue = calculateSizeWithEasing(
+        bp.width, 
+        minSizeValue, 
+        maxSizeValue, 
+        minScreenNum, 
+        maxScreenNum, 
+        scalingFunction, 
+        bezierValues
+      );
+      computedValue = outputUnit === 'rem' ? easedValue / rootSizeNum : easedValue;
       status = 'fluid';
     }
 
@@ -234,6 +283,103 @@ export const createCustomBreakpoint = (data) => {
     isDefault: false,
     id: Date.now() // Simple ID for deletion
   };
+};
+
+/**
+ * Get bezier values for predefined scaling functions
+ * @param {string} functionName - Name of the scaling function
+ * @returns {string} Bezier curve values
+ */
+export const getBezierForFunction = (functionName) => {
+  return SCALING_FUNCTIONS[functionName]?.bezier || '0.25, 0.1, 0.25, 1';
+};
+
+/**
+ * Apply easing function to a normalized value (0-1)
+ * @param {number} t - Normalized progress (0-1)
+ * @param {string} easingFunction - Easing function name
+ * @param {string} bezierValues - Custom bezier values
+ * @returns {number} Eased value (0-1)
+ */
+export const applyEasing = (t, easingFunction, bezierValues) => {
+  if (easingFunction === 'linear' || t <= 0 || t >= 1) {
+    return t;
+  }
+  
+  switch (easingFunction) {
+    case 'ease-in':
+      // Cubic bezier approximation for ease-in
+      return t * t * (3 - 2 * t); // Smoothstep approximation
+    case 'ease-out':
+      // Cubic bezier approximation for ease-out
+      return 1 - Math.pow(1 - t, 3);
+    case 'ease-in-out':
+      // Cubic bezier approximation for ease-in-out
+      return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    case 'custom':
+      // For custom bezier, we'll use a simplified approximation
+      // In a real implementation, you'd want a proper bezier curve evaluator
+      if (bezierValues) {
+        const values = bezierValues.split(',').map(v => parseFloat(v.trim()));
+        if (values.length === 4) {
+          // Simple approximation using the control points
+          const [x1, y1, x2, y2] = values;
+          return t * t * t * (1 - 3 * x1 + 3 * x2) + 3 * t * t * (x1 - 2 * x2 + 1) + 3 * t * x2 + 0;
+        }
+      }
+      return t;
+    default:
+      return t;
+  }
+};
+
+/**
+ * Calculate size with easing applied
+ * @param {number} screenWidth - Current screen width
+ * @param {number} minSize - Minimum size
+ * @param {number} maxSize - Maximum size
+ * @param {number} minScreen - Minimum screen width
+ * @param {number} maxScreen - Maximum screen width
+ * @param {string} scalingFunction - Scaling function type
+ * @param {string} bezierValues - Bezier curve values
+ * @returns {number} Calculated size with easing
+ */
+export const calculateSizeWithEasing = (screenWidth, minSize, maxSize, minScreen, maxScreen, scalingFunction, bezierValues) => {
+  // Clamp screen width to bounds
+  if (screenWidth <= minScreen) return minSize;
+  if (screenWidth >= maxScreen) return maxSize;
+  
+  // Calculate normalized progress (0-1)
+  const progress = (screenWidth - minScreen) / (maxScreen - minScreen);
+  
+  // Apply easing to progress
+  const easedProgress = applyEasing(progress, scalingFunction, bezierValues);
+  
+  // Calculate final size
+  return minSize + (maxSize - minSize) * easedProgress;
+};
+
+/**
+ * Generate CSS custom properties
+ * @param {string} propName - Property name
+ * @param {string} cssClamp - CSS clamp value
+ * @param {Object} data - Form data
+ * @returns {string} CSS custom properties
+ */
+export const generateCustomPropertiesCSS = (propName, cssClamp, data) => {
+  const { minScreenWidth, maxScreenWidth } = data;
+  const cleanPropName = propName.replace(/[^a-zA-Z0-9-]/g, '');
+  
+  return `:root {
+  --${cleanPropName}-fluid: ${cssClamp};
+  --${cleanPropName}-min-screen: ${minScreenWidth}px;
+  --${cleanPropName}-max-screen: ${maxScreenWidth}px;
+}
+
+/* Usage example */
+.element {
+  ${cleanPropName}: var(--${cleanPropName}-fluid);
+}`;
 };
 
 /**

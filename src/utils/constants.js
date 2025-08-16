@@ -17,7 +17,11 @@ export const DEFAULT_FORM_VALUES = {
   minSize: 16,
   maxSize: 32,
   minScreenWidth: 420,
-  maxScreenWidth: 1440
+  maxScreenWidth: 1440,
+  scalingFunction: 'linear',
+  customBezier: '0.25, 0.1, 0.25, 1',
+  generateCustomProperties: false,
+  customPropertyName: 'font-size'
 };
 
 /**
@@ -53,6 +57,21 @@ export const FORM_FIELDS = {
     min: 1,
     step: 1,
     label: 'Max Screen Width (px)'
+  },
+  scalingFunction: {
+    options: ['linear', 'ease-in', 'ease-out', 'ease-in-out', 'custom'],
+    label: 'Scaling Function'
+  },
+  customBezier: {
+    label: 'Custom Bezier (x1, y1, x2, y2)',
+    placeholder: '0.25, 0.1, 0.25, 1'
+  },
+  generateCustomProperties: {
+    label: 'Generate CSS Custom Properties'
+  },
+  customPropertyName: {
+    label: 'Property Name',
+    placeholder: 'font-size'
   }
 };
 
@@ -169,6 +188,17 @@ export const DEVICE_ICONS = {
 };
 
 /**
+ * Scaling function presets
+ */
+export const SCALING_FUNCTIONS = {
+  linear: { name: 'Linear', bezier: null },
+  'ease-in': { name: 'Ease In', bezier: '0.42, 0, 1, 1' },
+  'ease-out': { name: 'Ease Out', bezier: '0, 0, 0.58, 1' },
+  'ease-in-out': { name: 'Ease In-Out', bezier: '0.42, 0, 0.58, 1' },
+  custom: { name: 'Custom', bezier: null }
+};
+
+/**
  * URL parameter keys for state synchronization
  */
 export const URL_PARAMS = {
@@ -177,7 +207,11 @@ export const URL_PARAMS = {
   MIN: 'min',
   MAX: 'max',
   MIN_SCREEN: 'minScreen',
-  MAX_SCREEN: 'maxScreen'
+  MAX_SCREEN: 'maxScreen',
+  SCALING: 'scaling',
+  BEZIER: 'bezier',
+  CUSTOM_PROPS: 'customProps',
+  PROP_NAME: 'propName'
 };
 
 /**

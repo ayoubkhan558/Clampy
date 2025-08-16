@@ -137,6 +137,7 @@ const ClampGenerator = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isValid },
     formData,
     handleReset,
@@ -163,6 +164,9 @@ const ClampGenerator = () => {
 
   // Active tab state
   const [activeTab, setActiveTab] = useState('table');
+  
+  // Copy feedback state
+  const [copyFeedback, setCopyFeedback] = useState('');
 
   // Get outputs from calculations
   const outputs = useClampCalculations(formData, isValid, customBreakpoints);
@@ -170,7 +174,18 @@ const ClampGenerator = () => {
   // Event handlers
   const handleShareLink = () => {
     const shareUrl = generateShareUrl(formData);
-    copyToClipboard(shareUrl, 'Share Link');
+    copyToClipboard(
+      shareUrl, 
+      'Share Link',
+      () => {
+        setCopyFeedback('Share link copied!');
+        setTimeout(() => setCopyFeedback(''), 2000);
+      },
+      () => {
+        setCopyFeedback('Failed to copy link');
+        setTimeout(() => setCopyFeedback(''), 2000);
+      }
+    );
   };
 
   const onAddBreakpoint = (data) => {
@@ -290,6 +305,60 @@ const ClampGenerator = () => {
                 </FormField>
               </div>
 
+              {/* Scaling Function */}
+              <div className={styles.row}>
+                <FormField label="Scaling Function" error={errors.scalingFunction?.message}>
+                  <select
+                    {...register('scalingFunction')}
+                    className={`${styles.input} ${errors.scalingFunction ? styles.inputError : ''}`}
+                  >
+                    <option value="linear">Linear</option>
+                    <option value="ease-in">Ease In</option>
+                    <option value="ease-out">Ease Out</option>
+                    <option value="ease-in-out">Ease In-Out</option>
+                    <option value="custom">Custom Bezier</option>
+                  </select>
+                </FormField>
+                
+                {watch('scalingFunction') === 'custom' && (
+                  <FormField label="Custom Bezier (x1, y1, x2, y2)" error={errors.customBezier?.message}>
+                    <input
+                      type="text"
+                      placeholder="0.25, 0.1, 0.25, 1"
+                      {...register('customBezier')}
+                      className={`${styles.input} ${errors.customBezier ? styles.inputError : ''}`}
+                    />
+                  </FormField>
+                )}
+              </div>
+
+              {/* CSS Custom Properties */}
+              <div className={styles.row}>
+                <FormField label="Generate CSS Custom Properties">
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        {...register('generateCustomProperties')}
+                        className={styles.checkbox}
+                      />
+                      <span className={styles.checkboxText}>Generate CSS custom properties</span>
+                    </label>
+                  </div>
+                </FormField>
+                
+                {watch('generateCustomProperties') && (
+                  <FormField label="Property Name" error={errors.customPropertyName?.message}>
+                    <input
+                      type="text"
+                      placeholder="font-size"
+                      {...register('customPropertyName')}
+                      className={`${styles.input} ${errors.customPropertyName ? styles.inputError : ''}`}
+                    />
+                  </FormField>
+                )}
+              </div>
+
               {/* Action Buttons */}
               <div className={styles.actions}>
                 <button
@@ -306,7 +375,7 @@ const ClampGenerator = () => {
                   title="Copy shareable link with current settings"
                 >
                   <HiShare className={styles.buttonIcon} />
-                  Share Link
+                  {copyFeedback || 'Share Link'}
                 </button>
               </div>
             </form>
@@ -316,6 +385,15 @@ const ClampGenerator = () => {
               <CodeOutput
                 title="CSS Clamp"
                 code={outputs.cssClamp}
+                onCopy={handleCopyCode}
+              />
+            )}
+            
+            {/* CSS Custom Properties Output */}
+            {outputs.cssCustomProperties && (
+              <CodeOutput
+                title="CSS Custom Properties"
+                code={outputs.cssCustomProperties}
                 onCopy={handleCopyCode}
               />
             )}
