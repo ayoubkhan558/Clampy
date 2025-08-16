@@ -113,12 +113,6 @@ export const calculateClamp = (data, customBreakpoints = []) => {
   const fluidCalc = `calc(${slopePercent}vw + ${interceptFormatted}${outputUnit})`;
   const cssClamp = `clamp(${minFormatted}${outputUnit}, ${fluidCalc}, ${maxFormatted}${outputUnit})`;
 
-  // Build SCSS function example
-  const scssFunction = `// SCSS Function Usage
-.element {
-  font-size: fluid-clamp(${minSize}, ${maxSize}, ${minScreenWidth}, ${maxScreenWidth}, '${outputUnit}'${outputUnit === 'rem' ? `, ${rootFontSize}` : ''});
-}`;
-
   // Generate breakpoint table data
   const breakpointTable = generateBreakpointTable(
     data, 
@@ -131,7 +125,6 @@ export const calculateClamp = (data, customBreakpoints = []) => {
 
   return {
     cssClamp,
-    scssFunction,
     breakpointTable
   };
 };

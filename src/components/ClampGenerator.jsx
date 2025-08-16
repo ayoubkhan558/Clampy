@@ -2,12 +2,14 @@ import { useState } from 'react';
 import styles from './ClampGenerator.module.scss';
 import ClampChart from './ClampChart';
 import BreakpointTable from './BreakpointTable';
+import ClampPreview from './ClampPreview';
 import {
   HiShare,
   HiClipboard,
   HiChartBar,
   HiPlus,
-  HiTableCells
+  HiTableCells,
+  HiEye
 } from 'react-icons/hi2';
 
 // Custom hooks
@@ -34,35 +36,45 @@ const FormField = ({ label, children, error }) => (
 /**
  * Code Output Component - Reusable code output with copy functionality
  */
-const CodeOutput = ({ title, code, onCopy }) => (
-  <div className={styles.codeOutput}>
-    <div className={styles.outputHeader}>
-      <h3 className={styles.outputLabel}>{title}</h3>
-      <button
-        onClick={() => onCopy(code, title)}
-        className={styles.copyButton}
-        title="Copy to clipboard"
-      >
-        <HiClipboard className={styles.buttonIcon} />
-        Copy
-      </button>
+const CodeOutput = ({ title, code, onCopy }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    onCopy(code, title);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className={styles.codeOutput}>
+      <div className={styles.outputHeader}>
+        <h3 className={styles.outputLabel}>{title}</h3>
+        <button
+          onClick={handleCopy}
+          className={`${styles.copyButton} ${copied ? styles.copied : ''}`}
+          title="Copy to clipboard"
+        >
+          <HiClipboard className={styles.buttonIcon} />
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
+      </div>
+      <pre className={styles.codeBlock}>
+        <code>{code}</code>
+      </pre>
     </div>
-    <pre className={styles.codeBlock}>
-      <code>{code}</code>
-    </pre>
-  </div>
-);
+  );
+};
 
 /**
  * Breakpoint Form Component - Form for adding custom breakpoints
  */
-const BreakpointForm = ({ 
-  registerBreakpoint, 
-  handleSubmitBreakpoint, 
-  breakpointErrors, 
-  isBreakpointValid, 
-  onAddBreakpoint, 
-  onCancel 
+const BreakpointForm = ({
+  registerBreakpoint,
+  handleSubmitBreakpoint,
+  breakpointErrors,
+  isBreakpointValid,
+  onAddBreakpoint,
+  onCancel
 }) => (
   <form className={styles.addBreakpointForm} onSubmit={handleSubmitBreakpoint(onAddBreakpoint)}>
     <div className={styles.formRow}>
@@ -87,7 +99,7 @@ const BreakpointForm = ({
         className={`${styles.input} ${breakpointErrors.device ? styles.inputError : ''}`}
       />
     </div>
-    
+
     {(breakpointErrors.name || breakpointErrors.width || breakpointErrors.device) && (
       <div className={styles.formErrors}>
         {breakpointErrors.name && <span className={styles.error}>{breakpointErrors.name.message}</span>}
@@ -95,7 +107,7 @@ const BreakpointForm = ({
         {breakpointErrors.device && <span className={styles.error}>{breakpointErrors.device.message}</span>}
       </div>
     )}
-    
+
     <div className={styles.formActions}>
       <button
         type="submit"
@@ -189,41 +201,44 @@ const ClampGenerator = () => {
             </header>
 
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-              {/* Output Unit Selection */}
-              <FormField label="Output Unit" error={errors.outputUnit?.message}>
-                <div className={styles.radioGroup}>
-                  <label className={styles.radioLabel}>
-                    <input
-                      type="radio"
-                      value="px"
-                      {...register('outputUnit')}
-                      className={styles.radio}
-                    />
-                    Pixels (px)
-                  </label>
-                  <label className={styles.radioLabel}>
-                    <input
-                      type="radio"
-                      value="rem"
-                      {...register('outputUnit')}
-                      className={styles.radio}
-                    />
-                    Root em (rem)
-                  </label>
-                </div>
-              </FormField>
 
-              {/* Root Font Size (for rem calculations) */}
-              <FormField label="Root Font Size (px)" error={errors.rootFontSize?.message}>
-                <input
-                  type="number"
-                  placeholder="16"
-                  min="8"
-                  max="32"
-                  {...register('rootFontSize')}
-                  className={`${styles.input} ${errors.rootFontSize ? styles.inputError : ''}`}
-                />
-              </FormField>
+              {/* Output Unit Selection */}
+              <div className={styles.row}>
+                <FormField label="Output Unit" error={errors.outputUnit?.message}>
+                  <div className={styles.radioGroup}>
+                    <label className={styles.radioLabel}>
+                      <input
+                        type="radio"
+                        value="px"
+                        {...register('outputUnit')}
+                        className={styles.radio}
+                      />
+                      Pixels (px)
+                    </label>
+                    <label className={styles.radioLabel}>
+                      <input
+                        type="radio"
+                        value="rem"
+                        {...register('outputUnit')}
+                        className={styles.radio}
+                      />
+                      Root em (rem)
+                    </label>
+                  </div>
+                </FormField>
+
+                {/* Root Font Size (for rem calculations) */}
+                <FormField label="Root Font Size (px)" error={errors.rootFontSize?.message}>
+                  <input
+                    type="number"
+                    placeholder="16"
+                    min="8"
+                    max="32"
+                    {...register('rootFontSize')}
+                    className={`${styles.input} ${errors.rootFontSize ? styles.inputError : ''}`}
+                  />
+                </FormField>
+              </div>
 
               {/* Size Range */}
               <div className={styles.row}>
@@ -298,18 +313,10 @@ const ClampGenerator = () => {
 
             {/* Code Outputs */}
             {outputs.cssClamp && (
-              <CodeOutput 
-                title="CSS Clamp" 
-                code={outputs.cssClamp} 
-                onCopy={handleCopyCode} 
-              />
-            )}
-
-            {outputs.scssFunction && (
-              <CodeOutput 
-                title="SCSS Function" 
-                code={outputs.scssFunction} 
-                onCopy={handleCopyCode} 
+              <CodeOutput
+                title="CSS Clamp"
+                code={outputs.cssClamp}
+                onCopy={handleCopyCode}
               />
             )}
           </div>
@@ -336,6 +343,13 @@ const ClampGenerator = () => {
                     <HiChartBar className={styles.tabIcon} />
                     <span className={styles.tabText}>Visualization</span>
                   </button>
+                  <button
+                    className={`${styles.tab} ${activeTab === 'preview' ? styles.tabActive : ''}`}
+                    onClick={() => setActiveTab('preview')}
+                  >
+                    <HiEye className={styles.tabIcon} />
+                    <span className={styles.tabText}>Preview</span>
+                  </button>
                 </div>
 
                 {/* Tab Content */}
@@ -343,6 +357,16 @@ const ClampGenerator = () => {
                   {activeTab === 'chart' && (
                     <div className={styles.tabPanel}>
                       <ClampChart formData={formData} outputs={outputs} />
+                    </div>
+                  )}
+
+                  {activeTab === 'preview' && (
+                    <div className={styles.tabPanel}>
+                      <ClampPreview
+                        formData={formData}
+                        clampValue={outputs.cssClamp}
+                        outputs={outputs}
+                      />
                     </div>
                   )}
 

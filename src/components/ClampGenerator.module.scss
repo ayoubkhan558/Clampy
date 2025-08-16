@@ -7,6 +7,15 @@
   font-family: var(--font-family-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  
+@media (max-width: 768px) { 
+    padding: 16px;
+  }
+  
+@media (max-width: 480px) {
+    padding: 12px;
+  }
 }
 
 .layout {
@@ -556,10 +565,6 @@
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 16px;
-  }
-
   .layout {
     gap: 16px;
   }
@@ -599,10 +604,6 @@
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: 12px;
-  }
-
   .formCard {
     padding: 16px;
   }
