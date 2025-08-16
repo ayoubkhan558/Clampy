@@ -281,7 +281,7 @@ const ClampGenerator = () => {
                 <FormField label="Maximum Screen Width (px)" error={errors.maxScreenWidth?.message}>
                   <input
                     type="number"
-                    placeholder="1200"
+                    placeholder="1440"
                     min="400"
                     max="4000"
                     {...register('maxScreenWidth')}

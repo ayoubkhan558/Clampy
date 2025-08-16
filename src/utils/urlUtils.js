@@ -13,8 +13,8 @@ export const getUrlParams = () => {
     rootFontSize: parseFloat(params.get('root')) || 16,
     minSize: parseFloat(params.get('min')) || 16,
     maxSize: parseFloat(params.get('max')) || 32,
-    minScreenWidth: parseFloat(params.get('minScreen')) || 320,
-    maxScreenWidth: parseFloat(params.get('maxScreen')) || 1200
+    minScreenWidth: parseFloat(params.get('minScreen')) || 420,
+    maxScreenWidth: parseFloat(params.get('maxScreen')) || 1440
   };
 };
 
