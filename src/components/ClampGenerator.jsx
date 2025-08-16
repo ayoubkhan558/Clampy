@@ -137,6 +137,8 @@ const ClampGenerator = () => {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors, isValid },
     formData,
     handleReset,
@@ -205,25 +207,21 @@ const ClampGenerator = () => {
               {/* Output Unit Selection */}
               <div className={styles.row}>
                 <FormField label="Output Unit" error={errors.outputUnit?.message}>
-                  <div className={styles.radioGroup}>
-                    <label className={styles.radioLabel}>
-                      <input
-                        type="radio"
-                        value="px"
-                        {...register('outputUnit')}
-                        className={styles.radio}
-                      />
+                  <div className={styles.toggleGroup}>
+                    <button
+                      type="button"
+                      className={`${styles.toggleButton} ${watch('outputUnit') === 'px' ? styles.toggleActive : ''}`}
+                      onClick={() => setValue('outputUnit', 'px')}
+                    >
                       Pixels (px)
-                    </label>
-                    <label className={styles.radioLabel}>
-                      <input
-                        type="radio"
-                        value="rem"
-                        {...register('outputUnit')}
-                        className={styles.radio}
-                      />
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.toggleButton} ${watch('outputUnit') === 'rem' ? styles.toggleActive : ''}`}
+                      onClick={() => setValue('outputUnit', 'rem')}
+                    >
                       Root em (rem)
-                    </label>
+                    </button>
                   </div>
                 </FormField>
 
@@ -283,11 +281,65 @@ const ClampGenerator = () => {
                     type="number"
                     placeholder="1440"
                     min="400"
-                    max="4000"
                     {...register('maxScreenWidth')}
                     className={`${styles.input} ${errors.maxScreenWidth ? styles.inputError : ''}`}
                   />
                 </FormField>
+              </div>
+
+              {/* CSS Options */}
+              <div className={styles.row}>
+                <FormField label="CSS Fallback Support">
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        {...register('includeFallback')}
+                        className={styles.checkbox}
+                      />
+                      <span className={styles.checkboxText}>Generate media query fallback for older browsers</span>
+                    </label>
+                  </div>
+                </FormField>
+                <FormField label="Container Queries">
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        {...register('useContainerQueries')}
+                        className={styles.checkbox}
+                      />
+                      <span className={styles.checkboxText}>Use container inline size (cqi) instead of viewport width</span>
+                    </label>
+                  </div>
+                </FormField>
+              </div>
+
+              {/* CSS Custom Properties */}
+              <div className={styles.row}>
+                <FormField label="CSS Custom Properties">
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        {...register('generateCustomProperties')}
+                        className={styles.checkbox}
+                      />
+                      <span className={styles.checkboxText}>Generate CSS custom properties</span>
+                    </label>
+                  </div>
+                </FormField>
+                
+                {watch('generateCustomProperties') && (
+                  <FormField label="Property Name" error={errors.customPropertyName?.message}>
+                    <input
+                      type="text"
+                      placeholder="font-size"
+                      {...register('customPropertyName')}
+                      className={`${styles.input} ${errors.customPropertyName ? styles.inputError : ''}`}
+                    />
+                  </FormField>
+                )}
               </div>
 
               {/* Action Buttons */}
@@ -316,6 +368,22 @@ const ClampGenerator = () => {
               <CodeOutput
                 title="CSS Clamp"
                 code={outputs.cssClamp}
+                onCopy={handleCopyCode}
+              />
+            )}
+            
+            {outputs.cssFallback && (
+              <CodeOutput
+                title="CSS Fallback"
+                code={outputs.cssFallback}
+                onCopy={handleCopyCode}
+              />
+            )}
+            
+            {outputs.cssCustomProperties && (
+              <CodeOutput
+                title="CSS Custom Properties"
+                code={outputs.cssCustomProperties}
                 onCopy={handleCopyCode}
               />
             )}

@@ -6,6 +6,7 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
   const [viewportWidth, setViewportWidth] = useState(375);
   const [isDragging, setIsDragging] = useState(false);
   const [currentFontSize, setCurrentFontSize] = useState(0);
+  const [customText, setCustomText] = useState('The quick brown fox jumps over the lazy dog');
 
   // Calculate current font size based on viewport width
   useEffect(() => {
@@ -112,11 +113,22 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
           <span>Viewport: {viewportWidth}px</span>
         </div>
         
+        <div className={styles.textInputContainer}>
+          <label className={styles.textInputLabel}>Preview Text:</label>
+          <input
+            type="text"
+            value={customText}
+            onChange={(e) => setCustomText(e.target.value)}
+            className={styles.textInput}
+            placeholder="Enter custom text to preview..."
+          />
+        </div>
+        
         <div 
           className={styles.previewText}
           style={{ fontSize: `${currentFontSize}px` }}
         >
-          The quick brown fox jumps over the lazy dog
+          {customText}
         </div>
       </div>
     </div>

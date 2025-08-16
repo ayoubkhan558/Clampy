@@ -17,7 +17,11 @@ export const DEFAULT_FORM_VALUES = {
   minSize: 16,
   maxSize: 32,
   minScreenWidth: 420,
-  maxScreenWidth: 1440
+  maxScreenWidth: 1440,
+  generateCustomProperties: false,
+  customPropertyName: 'font-size',
+  includeFallback: false,
+  useContainerQueries: false
 };
 
 /**

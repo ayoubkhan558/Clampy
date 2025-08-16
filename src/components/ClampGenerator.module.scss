@@ -150,19 +150,56 @@
   }
 }
 
-.radioGroup {
+// Toggle Button Group
+.toggleGroup {
   display: flex;
-  gap: var(--space-4);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-primary);
+}
+
+.toggleButton {
+  flex: 1;
+  padding: 12px 16px;
+  @include fluid-font-size(14, 16, 320, 1200, 'px');
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:not(:last-child) {
+    border-right: 1px solid var(--border-primary);
+  }
+
+  &:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  &.toggleActive {
+    background: var(--accent-primary);
+    color: white;
+    font-weight: 600;
+  }
+}
+
+// Checkbox Styling
+.checkboxGroup {
   margin-top: var(--space-1);
 }
 
-.radioLabel {
+.checkboxLabel {
   display: flex;
-  align-items: center;
-  gap: var(--space-1);
+  align-items: flex-start;
+  gap: var(--space-2);
   @include fluid-font-size(14, 16, 320, 1200, 'px');
   color: var(--text-primary);
   cursor: pointer;
+  line-height: 1.4;
   transition: var(--transition-base);
 
   &:hover {
@@ -170,21 +207,33 @@
   }
 }
 
-.radio {
-  width: var(--space-4);
-  height: var(--space-4);
+.checkbox {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
   accent-color: var(--accent-primary);
   cursor: pointer;
+  border-radius: 3px;
+}
+
+.checkboxText {
+  flex: 1;
 }
 
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
+  margin-bottom: var(--space-6);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
     gap: var(--space-5);
+    margin-bottom: var(--space-5);
   }
 }
 

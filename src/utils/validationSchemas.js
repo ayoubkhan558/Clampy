@@ -50,7 +50,25 @@ export const clampSchema = yup.object({
       const { minScreenWidth } = this.parent;
       return !minScreenWidth || !value || value > minScreenWidth;
     })
-    .required('Maximum screen width is required')
+    .required('Maximum screen width is required'),
+    
+  generateCustomProperties: yup.boolean(),
+  
+  includeFallback: yup.boolean(),
+  
+  useContainerQueries: yup.boolean(),
+  
+  customPropertyName: yup.string()
+    .when('generateCustomProperties', {
+      is: true,
+      then: (schema) => schema
+        .trim()
+        .min(1, 'Property name is required')
+        .max(50, 'Property name must be 50 characters or less')
+        .matches(/^[a-zA-Z][a-zA-Z0-9-]*$/, 'Property name must start with a letter and contain only letters, numbers, and hyphens')
+        .required('Property name is required when generating custom properties'),
+      otherwise: (schema) => schema.optional()
+    })
 });
 
 // Custom breakpoint validation schema

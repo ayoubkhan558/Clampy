@@ -84,7 +84,11 @@ export const calculateClamp = (data, customBreakpoints = []) => {
     minSize,
     maxSize,
     minScreenWidth,
-    maxScreenWidth
+    maxScreenWidth,
+    generateCustomProperties = false,
+    customPropertyName = 'font-size',
+    includeFallback = false,
+    useContainerQueries = false
   } = data;
 
   // Convert to numbers
@@ -112,9 +116,27 @@ export const calculateClamp = (data, customBreakpoints = []) => {
   const minFormatted = formatNumber(minValue);
   const maxFormatted = formatNumber(maxValue);
 
-  // Build CSS clamp
-  const fluidCalc = `calc(${slopePercent}vw + ${interceptFormatted}${outputUnit})`;
-  const cssClamp = `clamp(${minFormatted}${outputUnit}, ${fluidCalc}, ${maxFormatted}${outputUnit})`;
+  // Build CSS clamp with container query support
+  const viewportUnit = useContainerQueries ? 'cqi' : 'vw';
+  const fluidCalc = `calc(${slopePercent}${viewportUnit} + ${interceptFormatted}${outputUnit})`;
+  let cssClamp = `clamp(${minFormatted}${outputUnit}, ${fluidCalc}, ${maxFormatted}${outputUnit})`;
+  
+  // Add container query wrapper if enabled
+  if (useContainerQueries) {
+    cssClamp = `/* Container query version (requires container-type: inline-size on parent) */\n${cssClamp}`;
+  }
+
+  // Generate CSS fallback if requested
+  let cssFallback = '';
+  if (includeFallback) {
+    cssFallback = generateMediaQueryFallback(data, minFormatted, maxFormatted, outputUnit);
+  }
+
+  // Generate CSS custom properties if requested
+  let cssCustomProperties = '';
+  if (generateCustomProperties && customPropertyName) {
+    cssCustomProperties = generateCustomPropertiesCSS(customPropertyName, cssClamp, data);
+  }
 
   // Generate breakpoint table data
   const breakpointTable = generateBreakpointTable(
@@ -128,6 +150,8 @@ export const calculateClamp = (data, customBreakpoints = []) => {
 
   return {
     cssClamp,
+    cssFallback,
+    cssCustomProperties,
     breakpointTable
   };
 };
@@ -234,6 +258,56 @@ export const createCustomBreakpoint = (data) => {
     isDefault: false,
     id: Date.now() // Simple ID for deletion
   };
+};
+
+/**
+ * Generate media query fallback CSS for browsers that don't support clamp()
+ * @param {Object} data - Form data
+ * @param {string} minFormatted - Formatted minimum value
+ * @param {string} maxFormatted - Formatted maximum value
+ * @param {string} outputUnit - Output unit (px or rem)
+ * @returns {string} Media query fallback CSS
+ */
+const generateMediaQueryFallback = (data, minFormatted, maxFormatted, outputUnit) => {
+  const { minScreenWidth, maxScreenWidth } = data;
+  
+  return `/* Fallback for browsers that don't support clamp() */
+@supports not (font-size: clamp(1rem, 1vw, 1rem)) {
+  /* Mobile: use minimum value */
+  font-size: ${minFormatted}${outputUnit};
+  
+  /* Tablet and up: use maximum value */
+  @media (min-width: ${minScreenWidth}px) {
+    font-size: ${maxFormatted}${outputUnit};
+  }
+  
+  /* Large screens: ensure maximum value */
+  @media (min-width: ${maxScreenWidth}px) {
+    font-size: ${maxFormatted}${outputUnit};
+  }
+}`;
+};
+
+/**
+ * Generate CSS custom properties
+ * @param {string} propName - Property name
+ * @param {string} cssClamp - CSS clamp value
+ * @param {Object} data - Form data
+ * @returns {string} CSS custom properties
+ */
+const generateCustomPropertiesCSS = (propName, cssClamp, data) => {
+  const { minSize, maxSize, outputUnit } = data;
+  
+  return `:root {
+  --${propName}: ${cssClamp};
+  --${propName}-min: ${minSize}${outputUnit};
+  --${propName}-max: ${maxSize}${outputUnit};
+}
+
+/* Usage example */
+.element {
+  font-size: var(--${propName});
+}`;
 };
 
 /**

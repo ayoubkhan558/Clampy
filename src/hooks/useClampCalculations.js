@@ -9,6 +9,8 @@ export const useClampCalculations = (formData, isValid, customBreakpoints) => {
   // Output state
   const [outputs, setOutputs] = useState({
     cssClamp: '',
+    cssFallback: '',
+    cssCustomProperties: '',
     breakpointTable: []
   });
 
@@ -30,7 +32,12 @@ export const useClampCalculations = (formData, isValid, customBreakpoints) => {
         updateUrlParams(formData);
       }, 500);
     } else {
-      setOutputs({ cssClamp: '', breakpointTable: [] });
+      setOutputs({ 
+        cssClamp: '', 
+        cssFallback: '', 
+        cssCustomProperties: '', 
+        breakpointTable: [] 
+      });
     }
   }, [formData, isValid, calculateOutputs]);
 
