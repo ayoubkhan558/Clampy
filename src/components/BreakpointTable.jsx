@@ -174,7 +174,7 @@ const BreakpointTable = ({ breakpointTable, onDeleteBreakpoint, onUpdateBreakpoi
                         >
                           <HiPencil className={styles.buttonIcon} />
                         </button>
-                        {!bp.isDefault && (
+                        {!bp.isDefault && !bp.originalId && (
                           <button
                             onClick={() => onDeleteBreakpoint(bp.id)}
                             className={`${styles.actionButton} ${styles.deleteButton}`}
