@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import styles from './ClampChart.module.scss';
-import { formatNumber, calculateSizeWithEasing } from '../utils/clampUtils';
+import { formatNumber } from '../utils/clampUtils';
 
 /**
  * ClampChart Component
@@ -18,9 +18,7 @@ const ClampChart = ({ formData, outputs }) => {
       minSize,
       maxSize,
       minScreenWidth,
-      maxScreenWidth,
-      scalingFunction = 'linear',
-      customBezier = '0.25, 0.1, 0.25, 1'
+      maxScreenWidth
     } = formData;
 
     // Convert to numbers
@@ -50,17 +48,7 @@ const ClampChart = ({ formData, outputs }) => {
         value = maxSizeNum;
         status = 'max';
       } else {
-        // Use easing calculation instead of linear interpolation
-        const bezierValues = scalingFunction === 'custom' ? customBezier : null;
-        value = calculateSizeWithEasing(
-          screen,
-          minSizeNum,
-          maxSizeNum,
-          minScreenNum,
-          maxScreenNum,
-          scalingFunction,
-          bezierValues
-        );
+        value = slope * screen + intercept;
         status = 'fluid';
       }
 

@@ -50,39 +50,7 @@ export const clampSchema = yup.object({
       const { minScreenWidth } = this.parent;
       return !minScreenWidth || !value || value > minScreenWidth;
     })
-    .required('Maximum screen width is required'),
-    
-  scalingFunction: yup.string()
-    .oneOf(['linear', 'ease-in', 'ease-out', 'ease-in-out', 'custom'], 'Please select a valid scaling function')
-    .required('Please select a scaling function'),
-    
-  customBezier: yup.string()
-    .when('scalingFunction', {
-      is: 'custom',
-      then: (schema) => schema
-        .matches(/^[\d\s.,]+$/, 'Bezier values must be numbers separated by commas')
-        .test('valid-bezier', 'Please enter 4 comma-separated numbers (x1, y1, x2, y2)', function(value) {
-          if (!value) return false;
-          const parts = value.split(',').map(p => p.trim());
-          return parts.length === 4 && parts.every(p => !isNaN(parseFloat(p)));
-        })
-        .required('Custom bezier values are required'),
-      otherwise: (schema) => schema.optional()
-    }),
-    
-  generateCustomProperties: yup.boolean(),
-  
-  customPropertyName: yup.string()
-    .when('generateCustomProperties', {
-      is: true,
-      then: (schema) => schema
-        .trim()
-        .min(1, 'Property name is required')
-        .max(50, 'Property name must be 50 characters or less')
-        .matches(/^[a-zA-Z][a-zA-Z0-9-]*$/, 'Property name must start with a letter and contain only letters, numbers, and hyphens')
-        .required('Property name is required when generating custom properties'),
-      otherwise: (schema) => schema.optional()
-    })
+    .required('Maximum screen width is required')
 });
 
 // Custom breakpoint validation schema

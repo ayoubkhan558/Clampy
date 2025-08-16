@@ -150,44 +150,6 @@
   }
 }
 
-// Checkbox styles
-.checkboxGroup {
-  margin-top: var(--space-1);
-}
-
-.checkboxLabel {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  cursor: pointer;
-  @include fluid-font-size(14, 16, 320, 1200, 'px');
-  color: var(--text-primary);
-}
-
-.checkbox {
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--border-primary);
-  border-radius: var(--radius-sm);
-  background: var(--bg-primary);
-  cursor: pointer;
-  transition: var(--transition-base);
-  
-  &:checked {
-    background: var(--accent-primary);
-    border-color: var(--accent-primary);
-  }
-  
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--accent-primary / 0.2);
-  }
-}
-
-.checkboxText {
-  line-height: 1.4;
-}
-
 .radioGroup {
   display: flex;
   gap: var(--space-4);

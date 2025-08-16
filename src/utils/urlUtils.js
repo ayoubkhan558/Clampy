@@ -14,11 +14,7 @@ export const getUrlParams = () => {
     minSize: parseFloat(params.get('min')) || 16,
     maxSize: parseFloat(params.get('max')) || 32,
     minScreenWidth: parseFloat(params.get('minScreen')) || 420,
-    maxScreenWidth: parseFloat(params.get('maxScreen')) || 1440,
-    scalingFunction: params.get('scaling') || 'linear',
-    customBezier: params.get('bezier') || '0.25, 0.1, 0.25, 1',
-    generateCustomProperties: params.get('customProps') === 'true',
-    customPropertyName: params.get('propName') || 'font-size'
+    maxScreenWidth: parseFloat(params.get('maxScreen')) || 1440
   };
 };
 
@@ -34,10 +30,6 @@ export const updateUrlParams = (formData) => {
   params.set('max', formData.maxSize.toString());
   params.set('minScreen', formData.minScreenWidth.toString());
   params.set('maxScreen', formData.maxScreenWidth.toString());
-  params.set('scaling', formData.scalingFunction);
-  params.set('bezier', formData.customBezier);
-  params.set('customProps', formData.generateCustomProperties.toString());
-  params.set('propName', formData.customPropertyName);
   
   const newUrl = `${window.location.pathname}?${params.toString()}`;
   window.history.replaceState({}, '', newUrl);
@@ -57,10 +49,6 @@ export const generateShareUrl = (formData) => {
   params.set('max', formData.maxSize.toString());
   params.set('minScreen', formData.minScreenWidth.toString());
   params.set('maxScreen', formData.maxScreenWidth.toString());
-  params.set('scaling', formData.scalingFunction);
-  params.set('bezier', formData.customBezier);
-  params.set('customProps', formData.generateCustomProperties.toString());
-  params.set('propName', formData.customPropertyName);
   
   return `${currentUrl}?${params.toString()}`;
 };

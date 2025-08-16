@@ -6,25 +6,17 @@
  * Copy text to clipboard with fallback for older browsers
  * @param {string} text - Text to copy
  * @param {string} type - Type of content being copied (for logging)
- * @param {Function} onSuccess - Callback function to execute on successful copy
- * @param {Function} onError - Callback function to execute on copy failure
  * @returns {Promise<void>}
  */
-export const copyToClipboard = async (text, type = 'Text', onSuccess, onError) => {
+export const copyToClipboard = async (text, type = 'Text') => {
   try {
     await navigator.clipboard.writeText(text);
     console.log(`${type} copied to clipboard`);
-    if (onSuccess) onSuccess();
+    // You could add a toast notification here
   } catch (err) {
     console.error('Failed to copy to clipboard:', err);
     // Fallback for older browsers
-    try {
-      fallbackCopyToClipboard(text);
-      if (onSuccess) onSuccess();
-    } catch (fallbackErr) {
-      console.error('Fallback copy also failed:', fallbackErr);
-      if (onError) onError();
-    }
+    fallbackCopyToClipboard(text);
   }
 };
 
@@ -42,12 +34,12 @@ const fallbackCopyToClipboard = (text) => {
   textArea.focus();
   textArea.select();
   
-  const successful = document.execCommand('copy');
-  document.body.removeChild(textArea);
-  
-  if (!successful) {
-    throw new Error('Fallback copy method failed');
+  try {
+    document.execCommand('copy');
+    console.log('Text copied using fallback method');
+  } catch (err) {
+    console.error('Fallback copy failed:', err);
   }
   
-  console.log('Text copied using fallback method');
+  document.body.removeChild(textArea);
 };
