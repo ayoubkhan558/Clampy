@@ -14,6 +14,10 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-primary);
   background: var(--bg-primary);
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 }
 
 .breakpointTable {
@@ -25,6 +29,10 @@
     @include fluid-padding(12, 16, 320, 1200, 'px');
     text-align: left;
     border-bottom: 1px solid var(--border-primary);
+
+    @media (max-width: 768px) {
+      padding: 8px 12px;
+    }
   }
 
   th {
@@ -83,6 +91,10 @@
   display: flex;
   align-items: center;
   gap: 12px;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
 }
 
 .deviceIcon {
@@ -101,6 +113,10 @@
 
   &.icondesktop {
     color: var(--success);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
   }
 }
 
@@ -144,6 +160,11 @@
   letter-spacing: 0.5px;
   border-radius: var(--radius-sm);
   line-height: 1;
+
+  @media (max-width: 768px) {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
 }
 
 .statusmin {
@@ -164,6 +185,10 @@
 .actionsCell {
   text-align: center;
   width: 80px;
+
+  @media (max-width: 768px) {
+    width: 70px;
+  }
 }
 
 .actionButtons {
@@ -192,6 +217,19 @@
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 24px;
+    height: 24px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    
+    &:hover {
+      transform: none;
+    }
   }
 }
 
@@ -238,6 +276,11 @@
 .buttonIcon {
   width: 14px;
   height: 14px;
+
+  @media (max-width: 768px) {
+    width: 12px;
+    height: 12px;
+  }
 }
 
 // Edit input styles
@@ -296,57 +339,9 @@
   }
 }
 
-// Responsive table adjustments
-@media (max-width: 768px) {
-  .tableContainer {
-    font-size: 14px;
-  }
-
-  .breakpointTable {
-    th, td {
-      padding: 8px 12px;
-    }
-  }
-
-  .deviceInfo {
-    gap: 8px;
-  }
-
-  .deviceIcon {
-    font-size: 16px;
-  }
-
-  .statusBadge {
-    padding: 3px 6px;
-    font-size: 10px;
-  }
-  
-  .actionsCell {
-    width: 70px;
-  }
-  
-  .actionButton {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .buttonIcon {
-    width: 12px;
-    height: 12px;
-  }
-}
-
 // Reduced motion support
 @media (prefers-reduced-motion: reduce) {
   .breakpointTable tbody tr {
     transition: none;
-  }
-  
-  .actionButton {
-    transition: none;
-    
-    &:hover {
-      transform: none;
-    }
   }
 }

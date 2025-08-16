@@ -373,10 +373,6 @@ const ClampGenerator = () => {
                   {activeTab === 'table' && (
                     <div className={styles.tabPanel}>
                       <div className={styles.tableHeader}>
-                        <h3 className={styles.tableTitle}>Responsive Preview</h3>
-                        <p className={styles.tableSubtitle}>
-                          See how your clamp value behaves across different devices
-                        </p>
                         <div className={styles.breakpointActions}>
                           <button
                             onClick={toggleAddBreakpoint}

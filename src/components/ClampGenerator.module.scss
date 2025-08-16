@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: var(--bg-secondary);
   @include fluid-padding(16, 24, 320, 1200, 'px');
-  font-family: var(--font-family-sans);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -13,7 +13,7 @@
     padding: 16px;
   }
   
-@media (max-width: 480px) {
+  @media (max-width: 480px) {
     padding: 12px;
   }
 }
@@ -30,6 +30,10 @@
     grid-template-columns: 1fr;
     gap: var(--space-5);
   }
+
+  @media (max-width: 768px) {
+    gap: 16px;
+  }
 }
 
 .leftColumn {
@@ -38,19 +42,29 @@
 }
 
 .rightColumn {
-  min-height: 600px;
+  position: sticky;
+  top: var(--space-6);
+  height: fit-content;
+
+  @media (max-width: 480px) {
+    min-height: 400px;
+  }
 }
 
 .formCard,
 .outputCard {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
+  padding: var(--space-6);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-primary);
-  transition: var(--transition-base);
 
-  &:hover {
-    box-shadow: var(--shadow-lg);
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px;
   }
 }
 
@@ -120,7 +134,7 @@
   &:focus {
     outline: none;
     border-color: var(--border-focus);
-    box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
+    box-shadow: 0 0 0 2px var(--accent-primary / 0.2);
   }
 
   &:hover:not(:focus) {
@@ -131,7 +145,7 @@
     border-color: var(--border-error);
     
     &:focus {
-      box-shadow: 0 0 0 2px var(--color-error-500 / 0.2);
+      box-shadow: 0 0 0 2px var(--error / 0.2);
     }
   }
 }
@@ -179,6 +193,11 @@
   display: flex;
   gap: var(--space-3);
   justify-content: center;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 .resetButton,
@@ -199,7 +218,7 @@
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
+    box-shadow: 0 0 0 2px var(--accent-primary / 0.2);
   }
 
   &:active {
@@ -219,7 +238,7 @@
 
   &:hover:not(:disabled) {
     background: var(--bg-tertiary);
-    border-color: var(--text-muted);
+    border-color: var(--border-secondary);
   }
 }
 
@@ -234,7 +253,7 @@
   }
 
   &:focus {
-    box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
+    box-shadow: 0 0 0 2px var(--accent-primary / 0.2);
   }
 }
 
@@ -264,10 +283,16 @@
 
 .outputHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-2);
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
   gap: var(--space-3);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
 
 .outputLabel {
@@ -279,30 +304,36 @@
 }
 
 .copyButton {
-  @include fluid-padding(6, 8, 320, 1200, 'px');
-  @include fluid-font-size(12, 14, 320, 1200, 'px');
-  background: var(--accent-primary);
-  color: var(--accent-foreground);
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: var(--transition-base);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: 1px solid var(--button-secondary-border);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  min-width: 60px;
-  flex-shrink: 0;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 
   &:hover {
-    background: var(--accent-hover);
-    transform: translateY(-1px);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--color-primary-500 / 0.3);
+    background: var(--button-secondary-hover-bg);
+    border-color: var(--button-secondary-hover-border);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(1px);
+  }
+
+  &.copied {
+    background-color: var(--color-success-500);
+    border-color: var(--color-success-500);
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    align-self: flex-end;
   }
 }
 
@@ -383,14 +414,24 @@
 }
 
 .tabIcon {
-  width: 16px;
-  height: 16px;
+  font-size: var(--font-size-base);
   flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 }
 
 .tabText {
-  font-weight: inherit;
-  line-height: 1.2;
+  font-size: var(--font-size-sm);
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    display: none;
+  }
 }
 
 .tabContent {
@@ -401,14 +442,23 @@
 }
 
 .tabPanel {
-  height: 100%;
-  @include fluid-padding(20, 24, 320, 1200, 'px');
-  overflow-y: auto;
+  padding: var(--space-6);
+  min-height: 400px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 }
 
 .tableHeader {
   margin-bottom: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .tableTitle {
@@ -429,7 +479,6 @@
 .breakpointActions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 12px;
 }
 
 .addBreakpointButton {
@@ -455,7 +504,7 @@
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
+    box-shadow: 0 0 0 2px var(--accent-primary / 0.2);
   }
 }
 
@@ -533,12 +582,12 @@
 
   &:hover {
     background: var(--bg-tertiary);
-    border-color: var(--text-muted);
+    border-color: var(--border-secondary);
   }
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
+    box-shadow: 0 0 0 2px var(--accent-primary / 0.2);
   }
 }
 
@@ -564,68 +613,6 @@
   }
 }
 
-@media (max-width: 768px) {
-  .layout {
-    gap: 16px;
-  }
-
-  .formCard {
-    padding: 20px;
-  }
-
-  .outputHeader {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .copyButton {
-    align-self: flex-end;
-  }
-
-  .tabPanel {
-    padding: 16px;
-  }
-
-  .tab {
-    padding: 12px 16px;
-    font-size: 14px;
-    min-height: 44px;
-    gap: 6px;
-  }
-
-  .tabIcon {
-    font-size: 14px;
-  }
-
-  .tabText {
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 480px) {
-  .formCard {
-    padding: 16px;
-  }
-
-  .tabPanel {
-    padding: 12px;
-  }
-
-  .rightColumn {
-    min-height: 400px;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .resetButton,
-  .shareButton {
-    min-width: 100%;
-  }
-}
 
 // Focus visible for better accessibility
 .input:focus-visible,

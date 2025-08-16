@@ -192,9 +192,6 @@ const ClampChart = ({ formData, outputs }) => {
     <div className={styles.chartContainer}>
       <div className={styles.chartHeader}>
         <h3 className={styles.chartTitle}>Clamp Value Visualization</h3>
-        <p className={styles.chartSubtitle}>
-          How the value changes across different screen sizes
-        </p>
       </div>
       
       <div className={styles.chartWrapper}>

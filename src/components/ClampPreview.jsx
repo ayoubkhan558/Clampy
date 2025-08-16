@@ -7,30 +7,35 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [currentFontSize, setCurrentFontSize] = useState(0);
 
-  // Calculate the current font size based on viewport width
+  // Calculate current font size based on viewport width
   useEffect(() => {
-    if (!formData || !outputs) return;
+    if (!formData || !outputs.cssClamp) return;
     
-    const minScreen = parseFloat(formData.minScreenWidth);
-    const maxScreen = parseFloat(formData.maxScreenWidth);
-    const minSize = parseFloat(formData.minSize);
-    const maxSize = parseFloat(formData.maxSize);
+    const { minSize, maxSize, minScreenWidth, maxScreenWidth, outputUnit, rootFontSize } = formData;
+    const minScreen = parseFloat(minScreenWidth);
+    const maxScreen = parseFloat(maxScreenWidth);
+    const minSizeNum = parseFloat(minSize);
+    const maxSizeNum = parseFloat(maxSize);
+    const rootSizeNum = parseFloat(rootFontSize) || 16;
     
-    // Calculate the slope and intercept for the linear equation
-    const slope = (maxSize - minSize) / (maxScreen - minScreen);
-    const intercept = minSize - (slope * minScreen);
+    // Calculate linear interpolation
+    const slope = (maxSizeNum - minSizeNum) / (maxScreen - minScreen);
+    const intercept = minSizeNum - (slope * minScreen);
     
     // Calculate font size based on current viewport width
     let fontSize;
     if (viewportWidth <= minScreen) {
-      fontSize = minSize;
+      fontSize = minSizeNum;
     } else if (viewportWidth >= maxScreen) {
-      fontSize = maxSize;
+      fontSize = maxSizeNum;
     } else {
       fontSize = (slope * viewportWidth) + intercept;
     }
     
-    setCurrentFontSize(fontSize);
+    // Convert rem to px for display if needed
+    const displayFontSize = outputUnit === 'rem' ? fontSize * rootSizeNum : fontSize;
+    
+    setCurrentFontSize(displayFontSize);
   }, [viewportWidth, formData, outputs]);
 
   // Handle slider change
