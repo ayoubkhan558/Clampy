@@ -199,7 +199,7 @@ const ClampGenerator = () => {
             <header className={styles.header}>
               <h1 className={styles.title}>Clampy</h1>
               <p className={styles.subtitle}>
-                Generate fluid responsive values with CSS clamp() and SCSS fluid-clamp
+                Generate fluid responsive values with CSS clamp()
               </p>
             </header>
 
