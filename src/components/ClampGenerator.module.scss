@@ -55,7 +55,7 @@
 .outputCard {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: var(--space-6);
+  padding: var(--space-5);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-primary);
 
@@ -68,10 +68,6 @@
   }
 }
 
-.formCard {
-  @include fluid-padding(24, 32, 320, 1200, 'px');
-}
-
 .outputCard {
   height: 100%;
   display: flex;
@@ -79,7 +75,7 @@
 }
 
 .header {
-  @include fluid-padding(24, 32, 320, 1200, 'px');
+  padding-bottom: var(--space-5);
   border-bottom: 1px solid var(--border-primary);
   text-align: center;
 }
@@ -321,9 +317,8 @@
 }
 
 .codeOutput {
-  margin-top: var(--space-6);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--border-primary);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-primary);
 
   &:first-of-type {
     margin-top: var(--space-8);
