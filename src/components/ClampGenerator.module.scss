@@ -112,7 +112,7 @@
   }
 
   &:hover:not(.active) {
-    background-color: var(--bg-tertiary);
+    background-color: var(--color-primary);
   }
 }
 
@@ -142,7 +142,7 @@
 
   &:hover {
     color: var(--accent-primary);
-    background: var(--bg-tertiary);
+    background: var(--color-primary);
     border-color: var(--accent-primary);
   }
 }
@@ -425,7 +425,7 @@
   border-color: var(--border-primary);
 
   &:hover:not(:disabled) {
-    background: var(--bg-tertiary);
+    background: var(--color-primary);
     border-color: var(--border-secondary);
   }
 }
@@ -436,8 +436,8 @@
   border-color: var(--color-primary-hover);
 
   &:hover:not(:disabled) {
-    background: var(--color-primary-700);
-    border-color: var(--color-primary-700);
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
   }
 
   &:focus {
@@ -454,7 +454,7 @@
 .error {
   display: block;
   @include fluid-font-size(12, 14, 320, 1200, 'px');
-  color: var(--error);
+  color: var(--color-error);
   margin-top: var(--space-1);
   line-height: 1.3;
 }
@@ -518,8 +518,8 @@
   }
 
   &.copied {
-    background-color: var(--color-success-500);
-    border-color: var(--color-success-500);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
     color: white;
   }
 
@@ -584,7 +584,7 @@
   min-height: 40px;
 
   &:hover:not(.tabActive) {
-    background: var(--bg-tertiary);
+    background: var(--color-primary);
     color: var(--text-primary);
   }
 
@@ -637,7 +637,7 @@
 
 .tabPanel {
   // Mobile-first compact padding
-  padding: 12px;
+  padding-top: 12px;
   min-height: 400px;
 
   @include sm {
@@ -748,9 +748,9 @@
 .addButton {
   @include fluid-padding(8, 10, 320, 1200, 'px');
   @include fluid-font-size(13, 14, 320, 1200, 'px');
-  background: var(--success);
-  color: var(--success-foreground);
-  border: 1px solid var(--success);
+  background: var(--color-primary);
+  color: var(--color-text);
+  border: 1px solid var(--color-success);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition-base);
@@ -762,13 +762,13 @@
   min-width: 70px;
 
   &:hover:not(:disabled) {
-    background: var(--color-success-600);
-    border-color: var(--color-success-600);
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
   }
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--color-success-500 / 0.2);
+    box-shadow: 0 0 0 2px var(--color-primary / 0.2);
   }
 
   &:disabled {
@@ -790,7 +790,7 @@
   min-width: 70px;
 
   &:hover {
-    background: var(--bg-tertiary);
+    background: var(--color-primary);
     border-color: var(--border-secondary);
   }
 

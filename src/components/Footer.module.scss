@@ -19,7 +19,6 @@
 }
 
 .brand {
-  max-width: 350px;
 }
 
 .brandName {
@@ -59,7 +58,7 @@
 
   &:hover {
     color: var(--accent-primary);
-    background: var(--bg-tertiary);
+    background: var(--color-primary);
     border-color: var(--accent-primary);
     transform: translateY(-2px);
   }
@@ -116,6 +115,11 @@
   padding-top: var(--space-4);
   border-top: 1px solid var(--border-primary);
   gap: var(--space-4);
+  flex-direction: column;
+
+  @include md {
+    flex-direction: row;
+  }
 }
 
 .copyright {
@@ -134,7 +138,7 @@
 }
 
 .heart {
-  color: var(--error);
+  color: var(--color-error);
   font-size: 12px;
   animation: heartbeat 2s ease-in-out infinite;
 }
