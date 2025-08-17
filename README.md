@@ -193,7 +193,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Live Demo**: [clampy.mayoub.dev](https://clampy.mayoub.dev)
+- **Live Demo**: [clampy.netlify.app](https://clampy.netlify.app)
 - **GitHub**: [github.com/ayoubkhan558/Clampy](https://github.com/ayoubkhan558/Clampy)
 - **Issues**: [Report bugs or request features](https://github.com/ayoubkhan558/Clampy/issues)
 
