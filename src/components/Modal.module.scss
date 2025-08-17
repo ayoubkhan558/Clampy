@@ -1,0 +1,118 @@
+@import '../styles/clamp';
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+.modal {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95);
+  opacity: 0;
+  animation: slideIn 0.3s 0.1s forwards;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-primary);
+  flex-shrink: 0;
+}
+
+.title {
+  @include fluid-font-size(18, 20, 320, 1200, 'px');
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 20px;
+  cursor: pointer;
+  transition: var(--transition-base);
+
+  &:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-primary / 0.2);
+  }
+}
+
+.content {
+  padding: var(--space-4);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  h3 {
+    @include fluid-font-size(16, 18, 320, 1200, 'px');
+    font-weight: var(--font-weight-semibold);
+    margin: 0 0 var(--space-3) 0;
+    color: var(--accent-primary);
+  }
+
+  p {
+    @include fluid-font-size(14, 15, 320, 1200, 'px');
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-4) 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  a {
+    color: var(--accent-primary);
+    text-decoration: underline;
+    font-weight: 500;
+
+    &:hover {
+      color: var(--accent-hover);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -1,4 +1,5 @@
 @import '../styles/clamp';
+@import '../styles/variables';
 
 .chartContainer {
   margin-top: var(--space-6);
@@ -16,10 +17,6 @@
   color: var(--text-primary);
   margin: 0 0 var(--space-1) 0;
   line-height: 1.3;
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
 }
 
 .chartSubtitle {
@@ -27,35 +24,28 @@
   color: var(--text-primary);
   margin: 0;
   line-height: 1.4;
-
-  @media (max-width: 480px) {
-    font-size: 13px;
-  }
 }
 
 .chartWrapper {
+  width: 100%;
   position: relative;
   display: flex;
   justify-content: center;
   margin-bottom: var(--space-4);
   overflow-x: auto;
-
-  @media (max-width: 768px) {
-    padding: 4px;
-  }
+  padding: 4px;
+  @include md { padding: 0; }
 }
 
 .chart {
+  width: 100%;
   max-width: 100%;
   height: auto;
   background: var(--bg-primary);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-
-  @media (max-width: 768px) {
-    width: 100%;
-    min-width: 500px;
-  }
+  min-width: 500px;
+  @include md { min-width: 0; }
 
   @media print {
     border: 1px solid #000;
@@ -113,11 +103,11 @@
 }
 
 .keyPointmin {
-  fill: var(--error);
+  fill: var(--status-error);
 }
 
 .keyPointmax {
-  fill: var(--success);
+  fill: var(--status-success);
 }
 
 .keyLine {
@@ -131,11 +121,11 @@
 }
 
 .keyLinemin {
-  stroke: var(--error);
+  stroke: var(--status-error);
 }
 
 .keyLinemax {
-  stroke: var(--success);
+  stroke: var(--status-success);
 }
 
 .keyLabel {
@@ -146,11 +136,11 @@
 }
 
 .keyLabelmin {
-  fill: var(--error);
+  fill: var(--status-error);
 }
 
 .keyLabelmax {
-  fill: var(--success);
+  fill: var(--status-success);
 }
 
 // Breakpoint markers
@@ -173,15 +163,15 @@
 }
 
 .markermin {
-  fill: var(--error);
+  fill: var(--status-error);
 }
 
 .markermax {
-  fill: var(--success);
+  fill: var(--status-success);
 }
 
 .markerfluid {
-  fill: var(--color-primary-600);
+  fill: var(--color-primary);
 }
 
 // Axes
@@ -201,23 +191,18 @@
 .legend {
   display: flex;
   justify-content: center;
-  gap: 24px;
   flex-wrap: wrap;
-  @include fluid-padding(12, 16, 320, 1200, 'px');
   background: var(--bg-secondary);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-primary);
-
-  @media (max-width: 768px) {
-    gap: 16px;
-    padding: 12px;
-  }
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
+  // Mobile-first: column layout and compact spacing
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  // Enhance spacing at sm and md
+  @include sm { flex-direction: row; gap: 16px; }
+  @include md { gap: 24px; @include fluid-padding(12, 16, 320, 1200, 'px'); }
 
   @media print {
     background: white;
@@ -232,40 +217,33 @@
   @include fluid-font-size(13, 14, 320, 1200, 'px');
   color: var(--text-primary);
   font-weight: 500;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
 }
 
 .legendColor {
-  width: 16px;
-  height: 16px;
+  // Mobile-first smaller dot
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   border: 2px solid var(--bg-primary);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: 768px) {
-    width: 14px;
-    height: 14px;
-  }
+  @include md { width: 16px; height: 16px; }
 }
 
 .legendMin {
-  background: var(--error);
+  background: var(--status-error);
 }
 
 .legendFluid {
-  background: var(--color-primary-600);
+  background: var(--color-primary);
 }
 
 .legendMax {
-  background: var(--success);
+  background: var(--status-success);
 }
 
 .legendBreakpoint {
-  background: var(--color-primary-600);
-  border: 2px dashed var(--color-primary-600);
+  background: var(--color-primary);
+  border: 2px dashed var(--color-primary);
 }
 
 // Hover functionality styles
@@ -275,37 +253,36 @@
 }
 
 .hoverLine {
-  stroke: var(--color-primary-600);
+  stroke: var(--color-primary);
   stroke-width: 2;
   stroke-dasharray: 2,2;
   opacity: 0.8;
 }
 
 .hoverPoint {
-  fill: var(--color-primary-600);
+  fill: var(--color-primary);
   stroke: var(--bg-primary);
   stroke-width: 3;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .tooltip {
-  position: fixed;
+  position: absolute;
   background: var(--bg-primary);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
-  padding: 12px;
-  z-index: 1000;
+  // Mobile-first compact tooltip
+  padding: 10px;
+  z-index: 10;
   pointer-events: none;
-  font-size: 13px;
-  min-width: 160px;
+  font-size: 12px;
+  min-width: 140px;
   backdrop-filter: blur(8px);
-  
-  @media (max-width: 768px) {
-    font-size: 12px;
-    padding: 10px;
-    min-width: 140px;
-  }
+  transform: translateX(-50%);
+  will-change: left, top;
+  // Enhance at md and up
+  @include md { font-size: 13px; padding: 12px; min-width: 160px; }
 }
 
 .tooltipContent {
@@ -334,15 +311,15 @@
 }
 
 .statusmin {
-  color: var(--error);
+  color: var(--status-error);
 }
 
 .statusmax {
-  color: var(--success);
+  color: var(--status-success);
 }
 
 .statusfluid {
-  color: var(--color-primary-600);
+  color: var(--color-primary);
 }
 
 // Dark mode specific adjustments

@@ -8,7 +8,6 @@ import { formatNumber } from '../utils/clampUtils';
  */
 const ClampChart = ({ formData, outputs }) => {
   const [hoverData, setHoverData] = useState(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const chartData = useMemo(() => {
     if (!formData || !outputs.breakpointTable || outputs.breakpointTable.length === 0) {
       return null;
@@ -211,8 +210,6 @@ const ClampChart = ({ formData, outputs }) => {
         y: mouseY,
         status: closestPoint.status
       });
-      
-      setMousePosition({ x: event.clientX, y: event.clientY });
     } else {
       setHoverData(null);
     }
@@ -401,8 +398,8 @@ const ClampChart = ({ formData, outputs }) => {
               Screen Width (px)
             </text>
             <text
-              x="-35"
-              y={chartData.plotHeight / 2}
+              x="-25"
+              y={(chartData.plotHeight / 2) - 25}
               className={styles.axisLabel}
               textAnchor="middle"
               transform={`rotate(-90, -35, ${chartData.plotHeight / 2})`}
@@ -412,13 +409,13 @@ const ClampChart = ({ formData, outputs }) => {
           </g>
         </svg>
         
-        {/* Hover tooltip */}
+        {/* Hover tooltip - top centered and follows hover X */}
         {hoverData && (
-          <div 
+          <div
             className={styles.tooltip}
             style={{
-              left: mousePosition.x + 10,
-              top: mousePosition.y - 10
+              left: chartData.padding.left + hoverData.x,
+              top: chartData.padding.top + 8
             }}
           >
             <div className={styles.tooltipContent}>

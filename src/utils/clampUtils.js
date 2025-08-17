@@ -98,13 +98,17 @@ export const calculateClamp = (data, customBreakpoints = []) => {
   const maxScreenNum = parseFloat(maxScreenWidth);
   const rootSizeNum = parseFloat(rootFontSize);
 
-  // Calculate slope and intercept in pixels first
-  const slope = (maxSizeNum - minSizeNum) / (maxScreenNum - minScreenNum);
-  const intercept = minSizeNum - (slope * minScreenNum);
+  // Normalize inputs to px for calculations regardless of selected unit
+  const minPx = outputUnit === 'rem' ? minSizeNum * rootSizeNum : minSizeNum;
+  const maxPx = outputUnit === 'rem' ? maxSizeNum * rootSizeNum : maxSizeNum;
+
+  // Calculate slope and intercept in pixels
+  const slope = (maxPx - minPx) / (maxScreenNum - minScreenNum);
+  const intercept = minPx - (slope * minScreenNum);
 
   // Convert values based on unit
-  const minValue = outputUnit === 'rem' ? minSizeNum / rootSizeNum : minSizeNum;
-  const maxValue = outputUnit === 'rem' ? maxSizeNum / rootSizeNum : maxSizeNum;
+  const minValue = outputUnit === 'rem' ? minPx / rootSizeNum : minPx;
+  const maxValue = outputUnit === 'rem' ? maxPx / rootSizeNum : maxPx;
   
   // For rem output, we need to convert the slope and intercept to rem units
   const slopeInUnit = outputUnit === 'rem' ? slope / rootSizeNum : slope;

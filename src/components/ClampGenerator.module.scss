@@ -1,39 +1,20 @@
 @import '../styles/clamp';
+@import '../styles/variables';
 
 .container {
-  min-height: 100vh;
-  background: var(--bg-secondary);
-  @include fluid-padding(16, 24, 320, 1200, 'px');
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  
-@media (max-width: 768px) { 
-    padding: 16px;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 12px;
-  }
 }
 
 .layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
+  // Mobile-first: single column and compact gap
+  grid-template-columns: 1fr;
+  gap: 16px;
   max-width: calc(100% - 0px);
   margin: 0 auto;
   align-items: start;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
-  }
-
-  @media (max-width: 768px) {
-    gap: 16px;
-  }
+  // Enhance spacing and switch to 2 columns at larger breakpoints
+  @include md { gap: var(--space-5); }
+  @include lg { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
 }
 
 .leftColumn {
@@ -45,27 +26,21 @@
   position: sticky;
   top: var(--space-6);
   height: fit-content;
-
-  @media (max-width: 480px) {
-    min-height: 400px;
-  }
+  // Mobile base: shorter min-height
+  min-height: 400px;
 }
 
 .formCard,
 .outputCard {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: var(--space-5);
+  // Mobile-first compact padding, scale up with breakpoints
+  padding: 16px;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-primary);
-
-  @media (max-width: 768px) {
-    padding: 20px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 16px;
-  }
+  backdrop-filter: blur(8px);
+  @include sm { padding: 20px; }
+  @include md { padding: var(--space-5); }
 }
 
 .outputCard {
@@ -79,11 +54,10 @@
   margin-bottom: var(--space-6);
   padding-bottom: var(--space-4);
   border-bottom: 1px solid var(--border-primary);
-
-  @media (max-width: 768px) {
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-  }
+  // Tighter spacing on small screens
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  @include md { margin-bottom: var(--space-6); padding-bottom: var(--space-4); }
 }
 
 .titleContainer {
@@ -91,7 +65,40 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.segmentedControl {
+  display: flex;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  width: 100%;
+}
+
+.segmentButton {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  background-color: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  font-weight: var(--font-weight-medium);
+  font-size: 14px;
+
+  &:not(:last-child) {
+    border-right: 1px solid var(--border-secondary);
+  }
+
+  &.active {
+    background-color: var(--accent-primary);
+    color: var(--accent-foreground);
+  }
+
+  &:hover:not(.active) {
+    background-color: var(--bg-tertiary);
+  }
 }
 
 .title {
@@ -100,10 +107,6 @@
   color: var(--text-primary);
   margin: 0;
   line-height: 1.2;
-
-  @media (max-width: 480px) {
-    font-size: 24px;
-  }
 }
 
 .developerInfo {
@@ -260,7 +263,7 @@
 
   &.inputError {
     border-color: var(--border-error);
-    
+
     &:focus {
       box-shadow: 0 0 0 2px var(--error / 0.2);
     }
@@ -339,19 +342,15 @@
 
 .row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
-  margin-bottom: var(--space-6);
+  // Mobile-first: single column
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
 
   &:last-child {
     margin-bottom: 0;
   }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
-    margin-bottom: var(--space-5);
-  }
+  @include sm { grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-6); }
 }
 
 .actions {
@@ -359,11 +358,10 @@
   display: flex;
   gap: var(--space-3);
   justify-content: center;
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-    gap: 8px;
-  }
+  // Mobile-first: stack actions
+  flex-direction: column;
+  gap: 8px;
+  @include sm { flex-direction: row; gap: var(--space-3); }
 }
 
 .resetButton,
@@ -452,12 +450,11 @@
   justify-content: space-between;
   margin-bottom: var(--space-3);
   gap: var(--space-3);
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
+  // Mobile-first: column layout on small screens
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  @include md { flex-direction: row; align-items: center; gap: var(--space-3); }
 }
 
 .outputLabel {
@@ -496,10 +493,9 @@
     border-color: var(--color-success-500);
     color: white;
   }
-
-  @media (max-width: 768px) {
-    align-self: flex-end;
-  }
+  // Mobile-first: align to end on small screens
+  align-self: flex-end;
+  @include md { align-self: auto; }
 }
 
 .codeBlock {
@@ -541,7 +537,7 @@
   @include fluid-padding(12, 16, 320, 1200, 'px');
   @include fluid-font-size(14, 16, 320, 1200, 'px');
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   color: var(--text-secondary);
   cursor: pointer;
   transition: var(--transition-base);
@@ -561,15 +557,12 @@
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px hsl(221.2 83.2% 53.3% / 0.2);
   }
 }
 
 .tabActive {
   background: var(--bg-primary);
   color: var(--color-primary-600);
-  font-weight: 600;
-  box-shadow: var(--shadow);
   border: 1px solid var(--border-primary);
 
   &:hover {
@@ -581,56 +574,41 @@
 .tabIcon {
   font-size: var(--font-size-base);
   flex-shrink: 0;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
+  // Mobile-first: smaller icon size
+  font-size: 14px;
+  @include md { font-size: var(--font-size-base); }
 }
 
 .tabText {
-  font-size: var(--font-size-sm);
-
-  @media (max-width: 768px) {
-    font-size: 13px;
-  }
-
-  @media (max-width: 640px) {
-    display: none;
-  }
+  // Mobile-first: hide label and use compact size
+  font-size: 13px;
+  display: none;
+  @include sm { display: inline; }
+  @include md { font-size: var(--font-size-sm); }
 }
 
 .tabContent {
   flex: 1;
-  background: var(--bg-primary);
   border-radius: 0 0 var(--radius) var(--radius);
   overflow: hidden;
 }
 
 .tabPanel {
-  padding: var(--space-6) 0;
+  // Mobile-first compact padding
+  padding: 12px;
   min-height: 400px;
-
-  @media (max-width: 768px) {
-    padding: 16px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 12px;
-  }
+  @include sm { padding: 16px; }
+  @include md { padding: var(--space-6) 0; }
 }
 
 .codeOutputs {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-
-  @media (max-width: 768px) {
-    padding: 0 16px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 12px;
-  }
+  // Mobile-first padding adjustments
+  padding: 0 12px;
+  @include sm { padding: 0 16px; }
+  @include md { padding: 0; }
 }
 
 .tableHeader {
@@ -696,14 +674,11 @@
 
 .formRow {
   display: grid;
-  grid-template-columns: 2fr 1fr 2fr;
-  gap: 12px;
+  // Mobile-first: single column
+  grid-template-columns: 1fr;
+  gap: 8px;
   margin-bottom: 12px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
+  @include md { grid-template-columns: 2fr 1fr 2fr; gap: 12px; }
 }
 
 .formActions {
@@ -774,19 +749,16 @@
   gap: 4px;
 }
 
-// Responsive adjustments
-@media (max-width: 1024px) {
-  .leftColumn {
-    position: static;
-  }
-
-  .layout {
-    align-items: stretch;
-  }
-
-  .rightColumn {
-    min-height: 500px;
-  }
+// Responsive adjustments (mobile-first)
+.leftColumn { position: sticky; top: var(--space-6); }
+// At medium screens and up, stretch layout and increase right column height
+@include md {
+  .layout { align-items: stretch; }
+  .rightColumn { min-height: 500px; }
+}
+// At extra large screens, remove the enforced min-height
+@include xl {
+  .rightColumn { min-height: auto; }
 }
 
 

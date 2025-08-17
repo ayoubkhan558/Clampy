@@ -1,4 +1,6 @@
 import { useForm, useWatch } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import { clampSchema } from '../utils/validationSchemas';
 import { getUrlParams, updateUrlParams } from '../utils/urlUtils';
@@ -34,6 +36,40 @@ export const useClampForm = () => {
 
   // Watch form values for real-time updates
   const formData = useWatch({ control }) || getDefaultValues();
+
+  // Keep sizes consistent when switching units (px <-> rem)
+  const prevUnitRef = useRef(formData.outputUnit);
+  useEffect(() => {
+    const currentUnit = formData.outputUnit;
+    const previousUnit = prevUnitRef.current;
+    if (!currentUnit || !previousUnit || currentUnit === previousUnit) return;
+
+    const root = parseFloat(formData.rootFontSize) || 16;
+    let min = parseFloat(formData.minSize);
+    let max = parseFloat(formData.maxSize);
+
+    if (previousUnit === 'px' && currentUnit === 'rem') {
+      // Convert px -> rem
+      min = min / root;
+      max = max / root;
+    } else if (previousUnit === 'rem' && currentUnit === 'px') {
+      // Convert rem -> px
+      min = min * root;
+      max = max * root;
+    } else {
+      prevUnitRef.current = currentUnit;
+      return;
+    }
+
+    // Apply converted values and update URL
+    const minFixed = Number(min.toFixed(3));
+    const maxFixed = Number(max.toFixed(3));
+    setValue('minSize', minFixed, { shouldValidate: true, shouldDirty: true });
+    setValue('maxSize', maxFixed, { shouldValidate: true, shouldDirty: true });
+    updateUrlParams({ ...formData, minSize: minFixed, maxSize: maxFixed });
+
+    prevUnitRef.current = currentUnit;
+  }, [formData.outputUnit, formData.rootFontSize, formData.minSize, formData.maxSize, setValue]);
 
   /**
    * Reset form to defaults

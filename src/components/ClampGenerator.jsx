@@ -196,40 +196,6 @@ const ClampGenerator = () => {
         {/* Left Column - Form */}
         <div className={styles.leftColumn}>
           <div className={styles.formCard}>
-            <header className={styles.header}>
-              <div className={styles.titleContainer}>
-                <h1 className={styles.title}>Clampy</h1>
-                <div className={styles.developerInfo}>
-                  <span className={styles.developerTrigger}>by Ayoub</span>
-                  <div className={styles.developerPopover}>
-                    <div className={styles.popoverContent}>
-                      <div className={styles.developerName}>Ayoub Khan</div>
-                      <div className={styles.developerLinks}>
-                        <a 
-                          href="https://mayoub.dev" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className={styles.developerLink}
-                        >
-                          🌐 mayoub.dev
-                        </a>
-                        <a 
-                          href="https://linkedin.com/in/ayoubkhan558" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className={styles.developerLink}
-                        >
-                          💼 LinkedIn
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <p className={styles.subtitle}>
-                Generate fluid responsive values with CSS clamp()
-              </p>
-            </header>
 
             {/* Code Outputs moved to tabs */}
 
@@ -257,21 +223,23 @@ const ClampGenerator = () => {
                 </FormField>
 
                 {/* Root Font Size (for rem calculations) */}
-                <FormField label="Root Font Size (px)" error={errors.rootFontSize?.message}>
-                  <input
-                    type="number"
-                    placeholder="16"
-                    min="8"
-                    max="32"
-                    {...register('rootFontSize')}
-                    className={`${styles.input} ${errors.rootFontSize ? styles.inputError : ''}`}
-                  />
-                </FormField>
+                {watch('outputUnit') === 'rem' && (
+                  <FormField label="Root Font Size (px)" error={errors.rootFontSize?.message}>
+                    <input
+                      type="number"
+                      placeholder="16"
+                      min="8"
+                      max="32"
+                      {...register('rootFontSize')}
+                      className={`${styles.input} ${errors.rootFontSize ? styles.inputError : ''}`}
+                    />
+                  </FormField>
+                )}
               </div>
 
               {/* Size Range */}
               <div className={styles.row}>
-                <FormField label="Minimum Size (px)" error={errors.minSize?.message}>
+                <FormField label={`Minimum Size (${watch('outputUnit')})`} error={errors.minSize?.message}>
                   <input
                     type="number"
                     placeholder="16"
@@ -282,7 +250,7 @@ const ClampGenerator = () => {
                     className={`${styles.input} ${errors.minSize ? styles.inputError : ''}`}
                   />
                 </FormField>
-                <FormField label="Maximum Size (px)" error={errors.maxSize?.message}>
+                <FormField label={`Maximum Size (${watch('outputUnit')})`} error={errors.maxSize?.message}>
                   <input
                     type="number"
                     placeholder="32"
@@ -514,6 +482,7 @@ const ClampGenerator = () => {
                         breakpointTable={outputs.breakpointTable}
                         onDeleteBreakpoint={handleDeleteBreakpoint}
                         onUpdateBreakpoint={handleUpdateBreakpoint}
+                        unit={watch('outputUnit')}
                       />
                     </div>
                   )}
