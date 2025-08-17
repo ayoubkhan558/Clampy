@@ -231,9 +231,8 @@ const ClampChart = ({ formData, outputs }) => {
       
       <div className={styles.chartWrapper}>
         <svg
-          width={chartData.chartWidth}
-          height={chartData.chartHeight}
           viewBox={`0 0 ${chartData.chartWidth} ${chartData.chartHeight}`}
+          preserveAspectRatio="xMidYMid meet"
           className={styles.chart}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
@@ -241,8 +240,8 @@ const ClampChart = ({ formData, outputs }) => {
           <defs>
             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="var(--error)" />
-              <stop offset="30%" stopColor="var(--color-primary-600)" />
-              <stop offset="70%" stopColor="var(--color-primary-600)" />
+              <stop offset="30%" stopColor="var(--color-primary-hover)" />
+              <stop offset="70%" stopColor="var(--color-primary-hover)" />
               <stop offset="100%" stopColor="var(--success)" />
             </linearGradient>
             <filter id="glow">

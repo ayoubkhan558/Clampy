@@ -32,9 +32,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: var(--space-4);
-  overflow-x: auto;
-  padding: 4px;
-  @include md { padding: 0; }
+  // No horizontal scrolling; chart scales to fit
 }
 
 .chart {
@@ -44,8 +42,7 @@
   background: var(--bg-primary);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-  min-width: 500px;
-  @include md { min-width: 0; }
+  // Ensure it shrinks on small screens
 
   @media print {
     border: 1px solid #000;

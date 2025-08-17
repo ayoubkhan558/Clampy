@@ -23,7 +23,7 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
     const slope = (maxSizeNum - minSizeNum) / (maxScreen - minScreen);
     const intercept = minSizeNum - (slope * minScreen);
     
-    // Calculate font size based on current viewport width
+    // Calculate font size based on current viewport width (in the selected output unit)
     let fontSize;
     if (viewportWidth <= minScreen) {
       fontSize = minSizeNum;
@@ -33,10 +33,8 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
       fontSize = (slope * viewportWidth) + intercept;
     }
     
-    // Convert rem to px for display if needed
-    const displayFontSize = outputUnit === 'rem' ? fontSize * rootSizeNum : fontSize;
-    
-    setCurrentFontSize(displayFontSize);
+    // Keep in selected unit; do not convert to px
+    setCurrentFontSize(fontSize);
   }, [viewportWidth, formData, outputs]);
 
   // Handle slider change
@@ -109,7 +107,7 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
         </div>
         
         <div className={styles.fontSizeDisplay}>
-          <span>Font Size: {currentFontSize.toFixed(1)}px</span>
+          <span>Font Size: {currentFontSize.toFixed(2)}{formData?.outputUnit || 'px'}</span>
           <span>Viewport: {viewportWidth}px</span>
         </div>
         
@@ -126,7 +124,7 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
         
         <div 
           className={styles.previewText}
-          style={{ fontSize: `${currentFontSize}px` }}
+          style={{ fontSize: `${currentFontSize}${formData?.outputUnit || 'px'}` }}
         >
           {customText}
         </div>

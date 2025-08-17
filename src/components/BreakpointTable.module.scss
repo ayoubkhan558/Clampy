@@ -78,7 +78,7 @@
 
 // Cell styles
 .deviceCell {
-  min-width: 180px;
+  min-width: 50px;
 }
 
 .deviceInfo {
@@ -95,7 +95,7 @@
   color: var(--text-secondary);
 
   &.iconmobile {
-    color: var(--color-primary-600);
+    color: var(--color-primary-hover);
   }
 
   &.icontablet {
@@ -164,7 +164,7 @@
 }
 
 .statusfluid {
-  background: var(--color-primary-600);
+  background: var(--color-primary-hover);
   color: white;
 }
 
@@ -213,7 +213,7 @@
 }
 
 .editButton {
-  background: var(--color-primary-600);
+  background: var(--color-primary-hover);
   color: var(--accent-foreground);
 
   &:hover:not(:disabled) {
@@ -278,7 +278,7 @@
 
   &:focus {
     outline: none;
-    border-color: var(--color-primary-600);
+    border-color: var(--color-primary-hover);
     box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
   }
 

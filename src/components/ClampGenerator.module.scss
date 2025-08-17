@@ -1,8 +1,7 @@
 @import '../styles/clamp';
 @import '../styles/variables';
 
-.container {
-}
+.container {}
 
 .layout {
   display: grid;
@@ -12,13 +11,19 @@
   max-width: calc(100% - 0px);
   margin: 0 auto;
   align-items: start;
+
   // Enhance spacing and switch to 2 columns at larger breakpoints
-  @include md { gap: var(--space-5); }
-  @include lg { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+  @include md {
+    gap: var(--space-5);
+  }
+
+  @include lg {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
 }
 
 .leftColumn {
-  position: sticky;
   top: var(--space-6);
 }
 
@@ -39,8 +44,14 @@
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-primary);
   backdrop-filter: blur(8px);
-  @include sm { padding: 20px; }
-  @include md { padding: var(--space-5); }
+
+  @include sm {
+    padding: 20px;
+  }
+
+  @include md {
+    padding: var(--space-5);
+  }
 }
 
 .outputCard {
@@ -57,7 +68,11 @@
   // Tighter spacing on small screens
   margin-bottom: 20px;
   padding-bottom: 16px;
-  @include md { margin-bottom: var(--space-6); padding-bottom: var(--space-4); }
+
+  @include md {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+  }
 }
 
 .titleContainer {
@@ -301,7 +316,7 @@
   }
 
   &.toggleActive {
-    background: var(--color-primary-600);
+    background: var(--color-primary);
     color: white;
     font-weight: 600;
   }
@@ -323,7 +338,7 @@
   transition: var(--transition-base);
 
   &:hover {
-    color: var(--color-primary-600);
+    color: var(--color-primary-hover);
   }
 }
 
@@ -331,7 +346,7 @@
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  accent-color: var(--color-primary-600);
+  accent-color: var(--color-primary-hover);
   cursor: pointer;
   border-radius: 3px;
 }
@@ -350,7 +365,12 @@
   &:last-child {
     margin-bottom: 0;
   }
-  @include sm { grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-6); }
+
+  @include sm {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
 }
 
 .actions {
@@ -361,7 +381,11 @@
   // Mobile-first: stack actions
   flex-direction: column;
   gap: 8px;
-  @include sm { flex-direction: row; gap: var(--space-3); }
+
+  @include sm {
+    flex-direction: row;
+    gap: var(--space-3);
+  }
 }
 
 .resetButton,
@@ -407,9 +431,9 @@
 }
 
 .shareButton {
-  background: var(--color-primary-600);
+  background: var(--color-primary-hover);
   color: #fff;
-  border-color: var(--color-primary-600);
+  border-color: var(--color-primary-hover);
 
   &:hover:not(:disabled) {
     background: var(--color-primary-700);
@@ -454,7 +478,12 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  @include md { flex-direction: row; align-items: center; gap: var(--space-3); }
+
+  @include md {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
+  }
 }
 
 .outputLabel {
@@ -493,9 +522,13 @@
     border-color: var(--color-success-500);
     color: white;
   }
+
   // Mobile-first: align to end on small screens
   align-self: flex-end;
-  @include md { align-self: auto; }
+
+  @include md {
+    align-self: auto;
+  }
 }
 
 .codeBlock {
@@ -562,12 +595,12 @@
 
 .tabActive {
   background: var(--bg-primary);
-  color: var(--color-primary-600);
+  color: var(--color-primary-hover);
   border: 1px solid var(--border-primary);
 
   &:hover {
     background: var(--bg-primary);
-    color: var(--color-primary-600);
+    color: var(--color-primary-hover);
   }
 }
 
@@ -576,15 +609,24 @@
   flex-shrink: 0;
   // Mobile-first: smaller icon size
   font-size: 14px;
-  @include md { font-size: var(--font-size-base); }
+
+  @include md {
+    font-size: var(--font-size-base);
+  }
 }
 
 .tabText {
   // Mobile-first: hide label and use compact size
   font-size: 13px;
   display: none;
-  @include sm { display: inline; }
-  @include md { font-size: var(--font-size-sm); }
+
+  @include sm {
+    display: inline;
+  }
+
+  @include md {
+    font-size: var(--font-size-sm);
+  }
 }
 
 .tabContent {
@@ -597,8 +639,14 @@
   // Mobile-first compact padding
   padding: 12px;
   min-height: 400px;
-  @include sm { padding: 16px; }
-  @include md { padding: var(--space-6) 0; }
+
+  @include sm {
+    padding: 16px;
+  }
+
+  @include md {
+    padding: var(--space-6) 0;
+  }
 }
 
 .codeOutputs {
@@ -607,8 +655,14 @@
   gap: var(--space-4);
   // Mobile-first padding adjustments
   padding: 0 12px;
-  @include sm { padding: 0 16px; }
-  @include md { padding: 0; }
+
+  @include sm {
+    padding: 0 16px;
+  }
+
+  @include md {
+    padding: 0;
+  }
 }
 
 .tableHeader {
@@ -641,9 +695,9 @@
 .addBreakpointButton {
   @include fluid-padding(8, 10, 320, 1200, 'px');
   @include fluid-font-size(13, 14, 320, 1200, 'px');
-  background: var(--color-primary-600);
+  background: var(--color-primary-hover);
   color: var(--accent-foreground);
-  border: 1px solid var(--color-primary-600);
+  border: 1px solid var(--color-primary-hover);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition-base);
@@ -678,7 +732,11 @@
   grid-template-columns: 1fr;
   gap: 8px;
   margin-bottom: 12px;
-  @include md { grid-template-columns: 2fr 1fr 2fr; gap: 12px; }
+
+  @include md {
+    grid-template-columns: 2fr 1fr 2fr;
+    gap: 12px;
+  }
 }
 
 .formActions {
@@ -750,15 +808,26 @@
 }
 
 // Responsive adjustments (mobile-first)
-.leftColumn { position: sticky; top: var(--space-6); }
+.leftColumn {
+  top: var(--space-6);
+}
+
 // At medium screens and up, stretch layout and increase right column height
 @include md {
-  .layout { align-items: stretch; }
-  .rightColumn { min-height: 500px; }
+  .layout {
+    align-items: stretch;
+  }
+
+  .rightColumn {
+    min-height: 500px;
+  }
 }
+
 // At extra large screens, remove the enforced min-height
 @include xl {
-  .rightColumn { min-height: auto; }
+  .rightColumn {
+    min-height: auto;
+  }
 }
 
 
@@ -767,7 +836,7 @@
 .radio:focus-visible,
 .resetButton:focus-visible,
 .copyButton:focus-visible {
-  outline: 2px solid var(--color-primary-600);
+  outline: 2px solid var(--color-primary-hover);
   outline-offset: 2px;
 }
 
