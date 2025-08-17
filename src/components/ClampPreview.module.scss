@@ -102,7 +102,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--accent-primary);
+    background: var(--color-primary-600);
     cursor: grab;
     border: 2px solid white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -120,7 +120,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--accent-primary);
+    background: var(--color-primary-600);
     cursor: grab;
     border: 2px solid white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -140,7 +140,7 @@
     background: linear-gradient(
       to right,
       var(--success) 0%,
-      var(--accent-primary) 50%,
+      var(--color-primary-600) 50%,
       var(--accent-hover) 50%,
       var(--accent-hover) 100%
     );
@@ -152,7 +152,7 @@
     background: linear-gradient(
       to right,
       var(--success) 0%,
-      var(--accent-primary) 50%,
+      var(--color-primary-600) 50%,
       var(--accent-hover) 50%,
       var(--accent-hover) 100%
     );
@@ -172,7 +172,7 @@
     transition: color 0.2s ease;
     
     &:hover {
-      color: var(--accent-primary);
+      color: var(--color-primary-600);
       opacity: 1;
     }
   }
@@ -200,7 +200,7 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: var(--accent-primary);
+      background: var(--color-primary-600);
     }
     
     &:last-child::before {

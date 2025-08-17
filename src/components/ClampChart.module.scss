@@ -181,7 +181,7 @@
 }
 
 .markerfluid {
-  fill: var(--accent-primary);
+  fill: var(--color-primary-600);
 }
 
 // Axes
@@ -256,7 +256,7 @@
 }
 
 .legendFluid {
-  background: var(--accent-primary);
+  background: var(--color-primary-600);
 }
 
 .legendMax {
@@ -264,8 +264,8 @@
 }
 
 .legendBreakpoint {
-  background: var(--accent-primary);
-  border: 2px dashed var(--accent-primary);
+  background: var(--color-primary-600);
+  border: 2px dashed var(--color-primary-600);
 }
 
 // Hover functionality styles
@@ -278,14 +278,14 @@
 }
 
 .hoverLine {
-  stroke: var(--accent-primary);
+  stroke: var(--color-primary-600);
   stroke-width: 2;
   stroke-dasharray: 2,2;
   opacity: 0.8;
 }
 
 .hoverPoint {
-  fill: var(--accent-primary);
+  fill: var(--color-primary-600);
   stroke: var(--bg-primary);
   stroke-width: 3;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
@@ -345,7 +345,7 @@
 }
 
 .statusfluid {
-  color: var(--accent-primary);
+  color: var(--color-primary-600);
 }
 
 // Dark mode specific adjustments

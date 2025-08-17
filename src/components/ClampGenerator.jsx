@@ -240,7 +240,7 @@ const ClampGenerator = () => {
 
               {/* Size Range */}
               <div className={styles.row}>
-                <FormField label="Minimum Size" error={errors.minSize?.message}>
+                <FormField label="Minimum Size (px)" error={errors.minSize?.message}>
                   <input
                     type="number"
                     placeholder="16"
@@ -251,7 +251,7 @@ const ClampGenerator = () => {
                     className={`${styles.input} ${errors.minSize ? styles.inputError : ''}`}
                   />
                 </FormField>
-                <FormField label="Maximum Size" error={errors.maxSize?.message}>
+                <FormField label="Maximum Size (px)" error={errors.maxSize?.message}>
                   <input
                     type="number"
                     placeholder="32"

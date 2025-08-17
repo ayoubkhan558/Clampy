@@ -244,8 +244,8 @@ const ClampChart = ({ formData, outputs }) => {
           <defs>
             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="var(--error)" />
-              <stop offset="30%" stopColor="var(--accent-primary)" />
-              <stop offset="70%" stopColor="var(--accent-primary)" />
+              <stop offset="30%" stopColor="var(--color-primary-600)" />
+              <stop offset="70%" stopColor="var(--color-primary-600)" />
               <stop offset="100%" stopColor="var(--success)" />
             </linearGradient>
             <filter id="glow">

@@ -181,7 +181,7 @@
   }
 
   &.toggleActive {
-    background: var(--accent-primary);
+    background: var(--color-primary-600);
     color: white;
     font-weight: 600;
   }
@@ -203,7 +203,7 @@
   transition: var(--transition-base);
 
   &:hover {
-    color: var(--accent-primary);
+    color: var(--color-primary-600);
   }
 }
 
@@ -211,7 +211,7 @@
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  accent-color: var(--accent-primary);
+  accent-color: var(--color-primary-600);
   cursor: pointer;
   border-radius: 3px;
 }
@@ -292,9 +292,9 @@
 }
 
 .shareButton {
-  background: var(--accent-primary);
+  background: var(--color-primary-600);
   color: var(--accent-foreground);
-  border-color: var(--accent-primary);
+  border-color: var(--color-primary-600);
 
   &:hover:not(:disabled) {
     background: var(--accent-hover);
@@ -451,14 +451,14 @@
 
 .tabActive {
   background: var(--bg-primary);
-  color: var(--accent-primary);
+  color: var(--color-primary-600);
   font-weight: 600;
   box-shadow: var(--shadow);
   border: 1px solid var(--border-primary);
 
   &:hover {
     background: var(--bg-primary);
-    color: var(--accent-primary);
+    color: var(--color-primary-600);
   }
 }
 
@@ -533,9 +533,9 @@
 .addBreakpointButton {
   @include fluid-padding(8, 10, 320, 1200, 'px');
   @include fluid-font-size(13, 14, 320, 1200, 'px');
-  background: var(--accent-primary);
+  background: var(--color-primary-600);
   color: var(--accent-foreground);
-  border: 1px solid var(--accent-primary);
+  border: 1px solid var(--color-primary-600);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition-base);
@@ -665,7 +665,7 @@
 .radio:focus-visible,
 .resetButton:focus-visible,
 .copyButton:focus-visible {
-  outline: 2px solid var(--accent-primary);
+  outline: 2px solid var(--color-primary-600);
   outline-offset: 2px;
 }
 

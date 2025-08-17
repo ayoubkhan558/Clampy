@@ -105,7 +105,7 @@
   color: var(--text-secondary);
 
   &.iconmobile {
-    color: var(--accent-primary);
+    color: var(--color-primary-600);
   }
 
   &.icontablet {
@@ -180,7 +180,7 @@
 }
 
 .statusfluid {
-  background: var(--accent-primary);
+  background: var(--color-primary-600);
   color: white;
 }
 
@@ -236,7 +236,7 @@
 }
 
 .editButton {
-  background: var(--accent-primary);
+  background: var(--color-primary-600);
   color: var(--accent-foreground);
 
   &:hover:not(:disabled) {
@@ -305,7 +305,7 @@
 
   &:focus {
     outline: none;
-    border-color: var(--accent-primary);
+    border-color: var(--color-primary-600);
     box-shadow: 0 0 0 2px var(--color-primary-500 / 0.2);
   }
 
