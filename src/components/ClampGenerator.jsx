@@ -197,7 +197,35 @@ const ClampGenerator = () => {
         <div className={styles.leftColumn}>
           <div className={styles.formCard}>
             <header className={styles.header}>
-              <h1 className={styles.title}>Clampy</h1>
+              <div className={styles.titleContainer}>
+                <h1 className={styles.title}>Clampy</h1>
+                <div className={styles.developerInfo}>
+                  <span className={styles.developerTrigger}>by Ayoub</span>
+                  <div className={styles.developerPopover}>
+                    <div className={styles.popoverContent}>
+                      <div className={styles.developerName}>Ayoub Khan</div>
+                      <div className={styles.developerLinks}>
+                        <a 
+                          href="https://mayoub.dev" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className={styles.developerLink}
+                        >
+                          🌐 mayoub.dev
+                        </a>
+                        <a 
+                          href="https://linkedin.com/in/ayoubkhan558" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className={styles.developerLink}
+                        >
+                          💼 LinkedIn
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <p className={styles.subtitle}>
                 Generate fluid responsive values with CSS clamp()
               </p>
