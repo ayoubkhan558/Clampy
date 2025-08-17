@@ -289,12 +289,12 @@
 
 .shareButton {
   background: var(--color-primary-600);
-  color: var(--accent-foreground);
+  color: #fff;
   border-color: var(--color-primary-600);
 
   &:hover:not(:disabled) {
-    background: var(--accent-hover);
-    border-color: var(--accent-hover);
+    background: var(--color-primary-700);
+    border-color: var(--color-primary-700);
   }
 
   &:focus {
@@ -495,6 +495,20 @@
 
   @media (max-width: 480px) {
     padding: 12px;
+  }
+}
+
+.codeOutputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 12px;
   }
 }
 

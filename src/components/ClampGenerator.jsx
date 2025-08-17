@@ -5,12 +5,13 @@ import BreakpointTable from './BreakpointTable';
 import ClampPreview from './ClampPreview';
 import {
   HiShare,
-  HiClipboard,
-  HiChartBar,
   HiPlus,
   HiTableCells,
-  HiEye
+  HiChartBar,
+  HiEye,
 } from 'react-icons/hi2';
+import { IoMdCopy } from "react-icons/io";
+import { FaCss3 } from "react-icons/fa6";
 
 // Custom hooks
 import { useClampForm } from '../hooks/useClampForm';
@@ -54,7 +55,7 @@ const CodeOutput = ({ title, code, onCopy }) => {
           className={`${styles.copyButton} ${copied ? styles.copied : ''}`}
           title="Copy to clipboard"
         >
-          <HiClipboard className={styles.buttonIcon} />
+          <IoMdCopy className={styles.buttonIcon} />
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
@@ -164,7 +165,7 @@ const ClampGenerator = () => {
   } = useBreakpoints();
 
   // Active tab state
-  const [activeTab, setActiveTab] = useState('table');
+  const [activeTab, setActiveTab] = useState('code');
 
   // Get outputs from calculations
   const outputs = useClampCalculations(formData, isValid, customBreakpoints);
@@ -202,30 +203,7 @@ const ClampGenerator = () => {
               </p>
             </header>
 
-            {/* Code Outputs */}
-            {outputs.cssClamp && (
-              <CodeOutput
-                title="CSS Clamp"
-                code={outputs.cssClamp}
-                onCopy={handleCopyCode}
-              />
-            )}
-
-            {outputs.cssFallback && (
-              <CodeOutput
-                title="CSS Fallback"
-                code={outputs.cssFallback}
-                onCopy={handleCopyCode}
-              />
-            )}
-
-            {outputs.cssCustomProperties && (
-              <CodeOutput
-                title="CSS Custom Properties"
-                code={outputs.cssCustomProperties}
-                onCopy={handleCopyCode}
-              />
-            )}
+            {/* Code Outputs moved to tabs */}
 
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 
@@ -376,15 +354,6 @@ const ClampGenerator = () => {
                 >
                   Reset
                 </button>
-                <button
-                  type="button"
-                  onClick={handleShareLink}
-                  className={styles.shareButton}
-                  title="Copy shareable link with current settings"
-                >
-                  <HiShare className={styles.buttonIcon} />
-                  Share Link
-                </button>
               </div>
             </form>
           </div>
@@ -397,6 +366,13 @@ const ClampGenerator = () => {
               <div className={styles.tabContainer}>
                 {/* Tab Navigation */}
                 <div className={styles.tabList}>
+                  <button
+                    className={`${styles.tab} ${activeTab === 'code' ? styles.tabActive : ''}`}
+                    onClick={() => setActiveTab('code')}
+                  >
+                    <FaCss3 className={styles.tabIcon} />
+                    <span className={styles.tabText}>Code</span>
+                  </button>
                   <button
                     className={`${styles.tab} ${activeTab === 'table' ? styles.tabActive : ''}`}
                     onClick={() => setActiveTab('table')}
@@ -422,6 +398,46 @@ const ClampGenerator = () => {
 
                 {/* Tab Content */}
                 <div className={styles.tabContent}>
+                  {activeTab === 'code' && (
+                    <div className={styles.tabPanel}>
+
+                      <button
+                        type="button"
+                        onClick={handleShareLink}
+                        className={styles.shareButton}
+                        title="Copy shareable link with current settings"
+                      >
+                        <HiShare className={styles.buttonIcon} />
+                        Share Link
+                      </button>
+                      <div className={styles.codeOutputs}>
+                        {outputs.cssClamp && (
+                          <CodeOutput
+                            title="CSS Clamp"
+                            code={outputs.cssClamp}
+                            onCopy={handleCopyCode}
+                          />
+                        )}
+
+                        {outputs.cssFallback && (
+                          <CodeOutput
+                            title="CSS Fallback"
+                            code={outputs.cssFallback}
+                            onCopy={handleCopyCode}
+                          />
+                        )}
+
+                        {outputs.cssCustomProperties && (
+                          <CodeOutput
+                            title="CSS Custom Properties"
+                            code={outputs.cssCustomProperties}
+                            onCopy={handleCopyCode}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   {activeTab === 'chart' && (
                     <div className={styles.tabPanel}>
                       <ClampChart formData={formData} outputs={outputs} />

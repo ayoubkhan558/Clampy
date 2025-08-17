@@ -34,11 +34,11 @@
 }
 
 .chartWrapper {
+  position: relative;
   display: flex;
   justify-content: center;
   margin-bottom: var(--space-4);
   overflow-x: auto;
-  padding: var(--space-2);
 
   @media (max-width: 768px) {
     padding: 4px;
@@ -269,9 +269,6 @@
 }
 
 // Hover functionality styles
-.chartWrapper {
-  position: relative;
-}
 
 .hoverElements {
   pointer-events: none;
