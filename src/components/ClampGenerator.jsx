@@ -202,6 +202,31 @@ const ClampGenerator = () => {
               </p>
             </header>
 
+            {/* Code Outputs */}
+            {outputs.cssClamp && (
+              <CodeOutput
+                title="CSS Clamp"
+                code={outputs.cssClamp}
+                onCopy={handleCopyCode}
+              />
+            )}
+
+            {outputs.cssFallback && (
+              <CodeOutput
+                title="CSS Fallback"
+                code={outputs.cssFallback}
+                onCopy={handleCopyCode}
+              />
+            )}
+
+            {outputs.cssCustomProperties && (
+              <CodeOutput
+                title="CSS Custom Properties"
+                code={outputs.cssCustomProperties}
+                onCopy={handleCopyCode}
+              />
+            )}
+
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 
               {/* Output Unit Selection */}
@@ -329,7 +354,7 @@ const ClampGenerator = () => {
                     </label>
                   </div>
                 </FormField>
-                
+
                 {watch('generateCustomProperties') && (
                   <FormField label="Property Name" error={errors.customPropertyName?.message}>
                     <input
@@ -362,31 +387,6 @@ const ClampGenerator = () => {
                 </button>
               </div>
             </form>
-
-            {/* Code Outputs */}
-            {outputs.cssClamp && (
-              <CodeOutput
-                title="CSS Clamp"
-                code={outputs.cssClamp}
-                onCopy={handleCopyCode}
-              />
-            )}
-            
-            {outputs.cssFallback && (
-              <CodeOutput
-                title="CSS Fallback"
-                code={outputs.cssFallback}
-                onCopy={handleCopyCode}
-              />
-            )}
-            
-            {outputs.cssCustomProperties && (
-              <CodeOutput
-                title="CSS Custom Properties"
-                code={outputs.cssCustomProperties}
-                onCopy={handleCopyCode}
-              />
-            )}
           </div>
         </div>
 
