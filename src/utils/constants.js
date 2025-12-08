@@ -80,69 +80,69 @@ export const TABS = {
  * Default breakpoints with device information
  */
 export const DEFAULT_BREAKPOINTS = [
-  { 
-    name: 'Mobile S', 
-    width: 320, 
-    device: 'iPhone SE', 
-    icon: HiDevicePhoneMobile, 
-    category: 'mobile', 
-    isDefault: true 
+  {
+    name: 'Mobile S',
+    width: 320,
+    device: 'iPhone SE',
+    icon: HiDevicePhoneMobile,
+    category: 'mobile',
+    isDefault: true
   },
-  { 
-    name: 'Mobile M', 
-    width: 375, 
-    device: 'iPhone 12/13', 
-    icon: HiDevicePhoneMobile, 
-    category: 'mobile', 
-    isDefault: true 
+  {
+    name: 'Mobile M',
+    width: 375,
+    device: 'iPhone 12/13',
+    icon: HiDevicePhoneMobile,
+    category: 'mobile',
+    isDefault: true
   },
-  { 
-    name: 'Mobile L', 
-    width: 425, 
-    device: 'iPhone 12 Pro Max', 
-    icon: HiDevicePhoneMobile, 
-    category: 'mobile', 
-    isDefault: true 
+  {
+    name: 'Mobile L',
+    width: 425,
+    device: 'iPhone 12 Pro Max',
+    icon: HiDevicePhoneMobile,
+    category: 'mobile',
+    isDefault: true
   },
-  { 
-    name: 'Tablet', 
-    width: 768, 
-    device: 'iPad', 
-    icon: HiDeviceTablet, 
-    category: 'tablet', 
-    isDefault: true 
+  {
+    name: 'Tablet',
+    width: 768,
+    device: 'iPad',
+    icon: HiDeviceTablet,
+    category: 'tablet',
+    isDefault: true
   },
-  { 
-    name: 'Laptop', 
-    width: 1024, 
-    device: 'Laptop', 
-    icon: HiComputerDesktop, 
-    category: 'desktop', 
-    isDefault: true 
+  {
+    name: 'Laptop',
+    width: 1024,
+    device: 'Laptop',
+    icon: HiComputerDesktop,
+    category: 'desktop',
+    isDefault: true
   },
-  { 
-    name: 'Laptop L', 
-    width: 1440, 
-    device: 'MacBook Pro 16"', 
-    icon: HiComputerDesktop, 
-    category: 'desktop', 
-    isDefault: true 
+  {
+    name: 'Laptop L',
+    width: 1440,
+    device: 'MacBook Pro 16"',
+    icon: HiComputerDesktop,
+    category: 'desktop',
+    isDefault: true
   },
-  { 
-    name: 'Desktop', 
-    width: 1920, 
-    device: 'Desktop HD', 
-    icon: HiComputerDesktop, 
-    category: 'desktop', 
-    isDefault: true 
+  {
+    name: 'Desktop',
+    width: 1920,
+    device: 'Desktop HD',
+    icon: HiComputerDesktop,
+    category: 'desktop',
+    isDefault: true
   },
-  { 
-    name: 'Desktop L', 
-    width: 2560, 
-    device: 'Desktop QHD', 
-    icon: HiComputerDesktop, 
-    category: 'desktop', 
-    isDefault: true 
+  {
+    name: 'Desktop L',
+    width: 2560,
+    device: 'Desktop QHD',
+    icon: HiComputerDesktop,
+    category: 'desktop',
+    isDefault: true
   }
 ];
 
@@ -188,3 +188,21 @@ export const URL_PARAMS = {
  * Debounce delay for URL updates (in milliseconds)
  */
 export const URL_UPDATE_DELAY = 500;
+
+/**
+ * Number formatting constants
+ */
+export const PRECISION_THRESHOLD = 0.001;
+export const DECIMAL_PLACES = 3;
+
+/**
+ * Validation ranges for form inputs
+ */
+export const VALIDATION_RANGES = {
+  rootFontSize: { min: 8, max: 32 },
+  minSize: { min: 0.1, max: 1000 },
+  maxSize: { min: 0.1, max: 1000 },
+  minScreenWidth: { min: 200, max: 2000 },
+  maxScreenWidth: { min: 400, max: 4000 },
+  breakpointWidth: { min: 200, max: 4000 }
+};

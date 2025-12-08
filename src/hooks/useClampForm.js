@@ -39,12 +39,21 @@ export const useClampForm = () => {
 
   // Keep sizes consistent when switching units (px <-> rem)
   const prevUnitRef = useRef(formData.outputUnit);
+  const prevRootRef = useRef(formData.rootFontSize);
+
   useEffect(() => {
     const currentUnit = formData.outputUnit;
     const previousUnit = prevUnitRef.current;
-    if (!currentUnit || !previousUnit || currentUnit === previousUnit) return;
+    const currentRoot = formData.rootFontSize;
 
-    const root = parseFloat(formData.rootFontSize) || 16;
+    // Only run if unit actually changed
+    if (!currentUnit || !previousUnit || currentUnit === previousUnit) {
+      prevUnitRef.current = currentUnit;
+      prevRootRef.current = currentRoot;
+      return;
+    }
+
+    const root = parseFloat(currentRoot) || 16;
     let min = parseFloat(formData.minSize);
     let max = parseFloat(formData.maxSize);
 
@@ -58,6 +67,7 @@ export const useClampForm = () => {
       max = max * root;
     } else {
       prevUnitRef.current = currentUnit;
+      prevRootRef.current = currentRoot;
       return;
     }
 
@@ -69,7 +79,8 @@ export const useClampForm = () => {
     updateUrlParams({ ...formData, minSize: minFixed, maxSize: maxFixed });
 
     prevUnitRef.current = currentUnit;
-  }, [formData.outputUnit, formData.rootFontSize, formData.minSize, formData.maxSize, setValue]);
+    prevRootRef.current = currentRoot;
+  }, [formData.outputUnit, formData.rootFontSize, setValue]); // Fixed: removed minSize, maxSize from dependencies
 
   /**
    * Reset form to defaults

@@ -1,10 +1,12 @@
-import { 
-  DEFAULT_FORM_VALUES, 
-  DEFAULT_BREAKPOINTS, 
-  DEVICE_THRESHOLDS, 
-  DEVICE_CATEGORIES, 
+import {
+  DEFAULT_FORM_VALUES,
+  DEFAULT_BREAKPOINTS,
+  DEVICE_THRESHOLDS,
+  DEVICE_CATEGORIES,
   DEVICE_ICONS,
-  URL_PARAMS 
+  URL_PARAMS,
+  PRECISION_THRESHOLD,
+  DECIMAL_PLACES
 } from './constants';
 
 /**
@@ -35,7 +37,7 @@ export const updateUrlParams = (formData) => {
   params.set(URL_PARAMS.MAX, formData.maxSize.toString());
   params.set(URL_PARAMS.MIN_SCREEN, formData.minScreenWidth.toString());
   params.set(URL_PARAMS.MAX_SCREEN, formData.maxScreenWidth.toString());
-  
+
   const newUrl = `${window.location.pathname}?${params.toString()}`;
   window.history.replaceState({}, '', newUrl);
 };
@@ -54,7 +56,7 @@ export const generateShareUrl = (formData) => {
   params.set(URL_PARAMS.MAX, formData.maxSize.toString());
   params.set(URL_PARAMS.MIN_SCREEN, formData.minScreenWidth.toString());
   params.set(URL_PARAMS.MAX_SCREEN, formData.maxScreenWidth.toString());
-  
+
   return `${currentUrl}?${params.toString()}`;
 };
 
@@ -68,7 +70,7 @@ export const generateShareUrl = (formData) => {
  * @returns {string} Formatted number
  */
 export const formatNumber = (num) => {
-  return Math.abs(num) < 0.001 ? '0' : num.toFixed(3).replace(/\.?0+$/, '');
+  return Math.abs(num) < PRECISION_THRESHOLD ? '0' : num.toFixed(DECIMAL_PLACES).replace(/\.?0+$/, '');
 };
 
 /**
@@ -109,7 +111,7 @@ export const calculateClamp = (data, customBreakpoints = []) => {
   // Convert values based on unit
   const minValue = outputUnit === 'rem' ? minPx / rootSizeNum : minPx;
   const maxValue = outputUnit === 'rem' ? maxPx / rootSizeNum : maxPx;
-  
+
   // For rem output, we need to convert the slope and intercept to rem units
   const slopeInUnit = outputUnit === 'rem' ? slope / rootSizeNum : slope;
   const interceptInUnit = outputUnit === 'rem' ? intercept / rootSizeNum : intercept;
@@ -124,7 +126,7 @@ export const calculateClamp = (data, customBreakpoints = []) => {
   const viewportUnit = useContainerQueries ? 'cqi' : 'vw';
   const fluidCalc = `calc(${slopePercent}${viewportUnit} + ${interceptFormatted}${outputUnit})`;
   let cssClamp = `clamp(${minFormatted}${outputUnit}, ${fluidCalc}, ${maxFormatted}${outputUnit})`;
-  
+
   // Add container query wrapper if enabled
   if (useContainerQueries) {
     cssClamp = `/* Container query version (requires container-type: inline-size on parent) */\n${cssClamp}`;
@@ -144,11 +146,11 @@ export const calculateClamp = (data, customBreakpoints = []) => {
 
   // Generate breakpoint table data
   const breakpointTable = generateBreakpointTable(
-    data, 
-    customBreakpoints, 
-    slope, 
-    intercept, 
-    minScreenNum, 
+    data,
+    customBreakpoints,
+    slope,
+    intercept,
+    minScreenNum,
     maxScreenNum
   );
 
@@ -199,7 +201,7 @@ const generateBreakpointTable = (data, customBreakpoints, slope, intercept, minS
   return allBreakpoints.map(bp => {
     let computedValue;
     let status;
-    
+
     if (bp.width <= minScreenNum) {
       const minValue = outputUnit === 'rem' ? parseFloat(data.minSize) / rootSizeNum : parseFloat(data.minSize);
       computedValue = minValue;
@@ -232,7 +234,7 @@ const generateBreakpointTable = (data, customBreakpoints, slope, intercept, minS
 export const getDeviceCategoryAndIcon = (width) => {
   let category = DEVICE_CATEGORIES.DESKTOP;
   let icon = DEVICE_ICONS[DEVICE_CATEGORIES.DESKTOP];
-  
+
   if (width < DEVICE_THRESHOLDS.MOBILE_MAX) {
     category = DEVICE_CATEGORIES.MOBILE;
     icon = DEVICE_ICONS[DEVICE_CATEGORIES.MOBILE];
@@ -274,7 +276,7 @@ export const createCustomBreakpoint = (data) => {
  */
 const generateMediaQueryFallback = (data, minFormatted, maxFormatted, outputUnit) => {
   const { minScreenWidth, maxScreenWidth } = data;
-  
+
   return `/* Fallback for browsers that don't support clamp() */
 @supports not (font-size: clamp(1rem, 1vw, 1rem)) {
   /* Mobile: use minimum value */
@@ -301,7 +303,7 @@ const generateMediaQueryFallback = (data, minFormatted, maxFormatted, outputUnit
  */
 const generateCustomPropertiesCSS = (propName, cssClamp, data) => {
   const { minSize, maxSize, outputUnit } = data;
-  
+
   return `:root {
   --${propName}: ${cssClamp};
   --${propName}-min: ${minSize}${outputUnit};
@@ -314,24 +316,3 @@ const generateCustomPropertiesCSS = (propName, cssClamp, data) => {
 }`;
 };
 
-/**
- * Copy text to clipboard with fallback for older browsers
- * @param {string} text - Text to copy
- * @param {string} type - Type of content being copied (for logging)
- * @returns {Promise<void>}
- */
-export const copyToClipboard = async (text, type) => {
-  try {
-    await navigator.clipboard.writeText(text);
-    console.log(`${type} copied to clipboard`);
-  } catch (err) {
-    console.error('Failed to copy to clipboard:', err);
-    // Fallback for older browsers
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-  }
-};

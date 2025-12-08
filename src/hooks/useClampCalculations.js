@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { calculateClamp } from '../utils/clampUtils';
 import { updateUrlParams } from '../utils/urlUtils';
 
@@ -14,6 +14,9 @@ export const useClampCalculations = (formData, isValid, customBreakpoints) => {
     breakpointTable: []
   });
 
+  // Use ref to store timeout ID instead of window object
+  const urlUpdateTimeoutRef = useRef(null);
+
   // Calculate clamp values
   const calculateOutputs = useCallback((data) => {
     return calculateClamp(data, customBreakpoints);
@@ -25,20 +28,29 @@ export const useClampCalculations = (formData, isValid, customBreakpoints) => {
     if (isValid && formData) {
       const newOutputs = calculateOutputs(formData);
       setOutputs(newOutputs);
-      
+
       // Update URL params with debouncing
-      clearTimeout(window.urlUpdateTimeout);
-      window.urlUpdateTimeout = setTimeout(() => {
+      if (urlUpdateTimeoutRef.current) {
+        clearTimeout(urlUpdateTimeoutRef.current);
+      }
+      urlUpdateTimeoutRef.current = setTimeout(() => {
         updateUrlParams(formData);
       }, 500);
     } else {
-      setOutputs({ 
-        cssClamp: '', 
-        cssFallback: '', 
-        cssCustomProperties: '', 
-        breakpointTable: [] 
+      setOutputs({
+        cssClamp: '',
+        cssFallback: '',
+        cssCustomProperties: '',
+        breakpointTable: []
       });
     }
+
+    // Cleanup function to clear timeout on unmount
+    return () => {
+      if (urlUpdateTimeoutRef.current) {
+        clearTimeout(urlUpdateTimeoutRef.current);
+      }
+    };
   }, [formData, isValid, calculateOutputs]);
 
   return outputs;
