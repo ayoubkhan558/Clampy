@@ -24,10 +24,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   background:
-    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.18) 0%, transparent 38%),
-    radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.14) 0%, transparent 42%),
-    radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.12) 0%, transparent 36%),
-    linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    radial-gradient(1200px 600px at 10% -10%, rgba(99, 102, 241, 0.2) 0%, transparent 55%),
+    radial-gradient(800px 500px at 95% 0%, rgba(56, 189, 248, 0.18) 0%, transparent 55%),
+    linear-gradient(180deg, #f5f7fb 0%, #e9eef8 100%);
   background-attachment: fixed;
 }
 
@@ -35,9 +34,9 @@ body {
 @media (prefers-color-scheme: dark) {
   body {
     background:
-      radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.28) 0%, transparent 38%),
-      radial-gradient(circle at 80% 18%, rgba(168, 85, 247, 0.2) 0%, transparent 40%),
-      linear-gradient(180deg, #0b1220 0%, #111827 100%);
+      radial-gradient(1000px 550px at 0% 0%, rgba(99, 102, 241, 0.26) 0%, transparent 52%),
+      radial-gradient(900px 500px at 100% 0%, rgba(59, 130, 246, 0.2) 0%, transparent 55%),
+      linear-gradient(180deg, #0f172a 0%, #111827 100%);
     background-attachment: fixed;
   }
 }
