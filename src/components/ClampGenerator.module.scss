@@ -1,5 +1,5 @@
-@import '../styles/clamp';
-@import '../styles/variables';
+@use '../styles/clamp' as *;
+@use '../styles/variables' as *;
 
 .container {}
 
@@ -523,12 +523,38 @@
     color: white;
   }
 
+  &.copyFailed {
+    background-color: var(--color-error);
+    border-color: var(--color-error);
+    color: white;
+  }
+
   // Mobile-first: align to end on small screens
   align-self: flex-end;
 
   @include md {
     align-self: auto;
   }
+}
+
+.clipboardStatus {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  border: 1px solid transparent;
+}
+
+.clipboardStatusSuccess {
+  background: hsl(142 76% 95%);
+  color: hsl(142 60% 28%);
+  border-color: hsl(142 45% 75%);
+}
+
+.clipboardStatusError {
+  background: hsl(0 85% 96%);
+  color: hsl(0 65% 35%);
+  border-color: hsl(0 55% 78%);
 }
 
 .codeBlock {

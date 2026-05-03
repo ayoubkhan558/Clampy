@@ -1,4 +1,6 @@
 @use './variables' as v;
+@use 'sass:math';
+@use 'sass:meta';
 
 /**
  * Strip units from a value
@@ -6,8 +8,8 @@
  * @return {number} The unitless number
  */
 @function strip-unit($number) {
-  @if type-of($number) == 'number' and not unitless($number) {
-    @return $number / ($number * 0 + 1);
+  @if meta.type-of($number) == 'number' and not math.is-unitless($number) {
+    @return math.div($number, ($number * 0 + 1));
   }
   @return $number;
 }
@@ -36,25 +38,25 @@
   $root-size: 16
 ) {
   // Get breakpoint values from map or use as-is if numeric
-  $min-bp: if(type-of($min-breakpoint) == 'string', map-get(('sm': v.$breakpoint-sm, 'md': v.$breakpoint-md, 'lg': v.$breakpoint-lg, 'xl': v.$breakpoint-xl, '2xl': v.$breakpoint-2xl), $min-breakpoint), $min-breakpoint);
-  $max-bp: if(type-of($max-breakpoint) == 'string', map-get(('sm': v.$breakpoint-sm, 'md': v.$breakpoint-md, 'lg': v.$breakpoint-lg, 'xl': v.$breakpoint-xl, '2xl': v.$breakpoint-2xl), $max-breakpoint), $max-breakpoint);
+  $min-bp: if(meta.type-of($min-breakpoint) == 'string', map-get(('sm': v.$breakpoint-sm, 'md': v.$breakpoint-md, 'lg': v.$breakpoint-lg, 'xl': v.$breakpoint-xl, '2xl': v.$breakpoint-2xl), $min-breakpoint), $min-breakpoint);
+  $max-bp: if(meta.type-of($max-breakpoint) == 'string', map-get(('sm': v.$breakpoint-sm, 'md': v.$breakpoint-md, 'lg': v.$breakpoint-lg, 'xl': v.$breakpoint-xl, '2xl': v.$breakpoint-2xl), $max-breakpoint), $max-breakpoint);
   
   // Convert to numbers for calculations
   $min-bp-num: strip-unit($min-bp);
   $max-bp-num: strip-unit($max-bp);
   
   // Convert sizes to numbers if they have units
-  $min-size-num: if(unitless($min-size), $min-size, strip-unit($min-size));
-  $max-size-num: if(unitless($max-size), $max-size, strip-unit($max-size));
+  $min-size-num: if(math.is-unitless($min-size), $min-size, strip-unit($min-size));
+  $max-size-num: if(math.is-unitless($max-size), $max-size, strip-unit($max-size));
   
   // Calculate slope and intercept with explicit unit stripping
-  $slope: (strip-unit($max-size-num) - strip-unit($min-size-num)) / (strip-unit($max-bp-num) - strip-unit($min-bp-num));
+  $slope: math.div((strip-unit($max-size-num) - strip-unit($min-size-num)), (strip-unit($max-bp-num) - strip-unit($min-bp-num)));
   $intercept: strip-unit($min-size-num) - ($slope * strip-unit($min-bp-num));
   
   // Convert to rem if needed
-  $min-value: if($unit == 'rem', $min-size-num / $root-size, $min-size-num);
-  $max-value: if($unit == 'rem', $max-size-num / $root-size, $max-size-num);
-  $intercept-value: if($unit == 'rem', $intercept / $root-size, $intercept);
+  $min-value: if($unit == 'rem', math.div($min-size-num, $root-size), $min-size-num);
+  $max-value: if($unit == 'rem', math.div($max-size-num, $root-size), $max-size-num);
+  $intercept-value: if($unit == 'rem', math.div($intercept, $root-size), $intercept);
   
   // Build the fluid calculation
   $fluid-calc: calc(#{$slope * 100}vw + #{$intercept-value}#{$unit});

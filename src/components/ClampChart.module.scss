@@ -1,5 +1,5 @@
-@import '../styles/clamp';
-@import '../styles/variables';
+@use '../styles/clamp' as *;
+@use '../styles/variables' as *;
 
 .chartContainer {
   margin-top: var(--space-6);

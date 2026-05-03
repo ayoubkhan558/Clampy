@@ -1,4 +1,4 @@
-@import '../styles/clamp';
+@use '../styles/clamp' as *;
 
 .overlay {
   position: fixed;

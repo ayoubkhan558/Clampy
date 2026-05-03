@@ -1,3 +1,6 @@
+@use 'sass:math';
+@use 'sass:meta';
+
 /**
  * CSS Variables - Design System Foundation
  * Centralized design tokens for consistent theming across the application
@@ -238,8 +241,8 @@ $breakpoint-2xl: 1440px;
 
 // Helper function to strip units from values
 @function strip-unit($value) {
-  @if type-of($value) == 'number' and not unitless($value) {
-    @return $value / ($value * 0 + 1);
+  @if meta.type-of($value) == 'number' and not math.is-unitless($value) {
+    @return math.div($value, ($value * 0 + 1));
   }
   @return $value;
 }

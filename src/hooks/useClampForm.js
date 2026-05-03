@@ -80,7 +80,7 @@ export const useClampForm = () => {
 
     prevUnitRef.current = currentUnit;
     prevRootRef.current = currentRoot;
-  }, [formData.outputUnit, formData.rootFontSize, setValue]); // Fixed: removed minSize, maxSize from dependencies
+  }, [formData, setValue]);
 
   /**
    * Reset form to defaults

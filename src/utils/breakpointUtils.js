@@ -48,7 +48,10 @@ export const getDeviceCategory = (width) => {
  * @returns {Object} Custom breakpoint object
  */
 export const createCustomBreakpoint = (data) => {
-  const width = parseInt(data.width);
+  const width = parseInt(data.width, 10);
+  if (Number.isNaN(width)) {
+    return null;
+  }
   const { category, icon } = getDeviceCategory(width);
 
   return {
@@ -58,7 +61,7 @@ export const createCustomBreakpoint = (data) => {
     icon: icon,
     category: category,
     isDefault: false,
-    id: data.originalId ? `custom-${data.originalId}` : `custom-${Date.now()}`, // Use consistent ID for edited defaults
+    id: data.originalId ? `custom-${data.originalId}` : `custom-${crypto.randomUUID()}`, // Use consistent ID for edited defaults
     originalId: data.originalId || null // Keep track of original default breakpoint ID
   };
 };

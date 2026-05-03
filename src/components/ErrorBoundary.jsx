@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import './ErrorBoundary.module.scss';
+import styles from './ErrorBoundary.module.scss';
 
 /**
  * Error Boundary Component
@@ -11,7 +11,7 @@ class ErrorBoundary extends Component {
         this.state = { hasError: false, error: null, errorInfo: null };
     }
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError() {
         // Update state so the next render will show the fallback UI
         return { hasError: true };
     }
@@ -38,31 +38,31 @@ class ErrorBoundary extends Component {
         if (this.state.hasError) {
             // Fallback UI
             return (
-                <div className="error-boundary">
-                    <div className="error-boundary__content">
+                <div className={styles.errorBoundary}>
+                    <div className={styles.content}>
                         <h1>😕 Oops! Something went wrong</h1>
                         <p>We're sorry, but something unexpected happened.</p>
 
-                        {process.env.NODE_ENV === 'development' && this.state.error && (
-                            <details className="error-boundary__details">
+                        {import.meta.env.DEV && this.state.error && (
+                            <details className={styles.details}>
                                 <summary>Error Details (Development Only)</summary>
-                                <pre className="error-boundary__stack">
+                                <pre className={styles.stack}>
                                     {this.state.error.toString()}
                                     {this.state.errorInfo && this.state.errorInfo.componentStack}
                                 </pre>
                             </details>
                         )}
 
-                        <div className="error-boundary__actions">
+                        <div className={styles.actions}>
                             <button
                                 onClick={this.handleReset}
-                                className="error-boundary__button error-boundary__button--primary"
+                                className={`${styles.button} ${styles.buttonPrimary}`}
                             >
                                 Try Again
                             </button>
                             <button
                                 onClick={() => window.location.reload()}
-                                className="error-boundary__button error-boundary__button--secondary"
+                                className={`${styles.button} ${styles.buttonSecondary}`}
                             >
                                 Reload Page
                             </button>

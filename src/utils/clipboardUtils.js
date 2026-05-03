@@ -13,10 +13,11 @@ export const copyToClipboard = async (text, type = 'Text') => {
     await navigator.clipboard.writeText(text);
     console.log(`${type} copied to clipboard`);
     // You could add a toast notification here
+    return true;
   } catch (err) {
     console.error('Failed to copy to clipboard:', err);
     // Fallback for older browsers
-    fallbackCopyToClipboard(text);
+    return fallbackCopyToClipboard(text);
   }
 };
 
@@ -35,11 +36,16 @@ const fallbackCopyToClipboard = (text) => {
   textArea.select();
   
   try {
-    document.execCommand('copy');
+    const copied = document.execCommand('copy');
+    if (!copied) {
+      throw new Error('Copy command rejected');
+    }
     console.log('Text copied using fallback method');
+    return true;
   } catch (err) {
     console.error('Fallback copy failed:', err);
+    return false;
+  } finally {
+    document.body.removeChild(textArea);
   }
-  
-  document.body.removeChild(textArea);
 };

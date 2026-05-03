@@ -1,64 +1,10 @@
 import {
-  DEFAULT_FORM_VALUES,
-  DEFAULT_BREAKPOINTS,
   DEVICE_THRESHOLDS,
   DEVICE_CATEGORIES,
   DEVICE_ICONS,
-  URL_PARAMS,
   PRECISION_THRESHOLD,
   DECIMAL_PLACES
 } from './constants';
-
-/**
- * Get URL parameters and return form data
- * @returns {Object} Form data from URL parameters or defaults
- */
-export const getUrlParams = () => {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    outputUnit: params.get(URL_PARAMS.UNIT) || DEFAULT_FORM_VALUES.outputUnit,
-    rootFontSize: parseFloat(params.get(URL_PARAMS.ROOT)) || DEFAULT_FORM_VALUES.rootFontSize,
-    minSize: parseFloat(params.get(URL_PARAMS.MIN)) || DEFAULT_FORM_VALUES.minSize,
-    maxSize: parseFloat(params.get(URL_PARAMS.MAX)) || DEFAULT_FORM_VALUES.maxSize,
-    minScreenWidth: parseFloat(params.get(URL_PARAMS.MIN_SCREEN)) || DEFAULT_FORM_VALUES.minScreenWidth,
-    maxScreenWidth: parseFloat(params.get(URL_PARAMS.MAX_SCREEN)) || DEFAULT_FORM_VALUES.maxScreenWidth
-  };
-};
-
-/**
- * Update URL parameters with form data
- * @param {Object} formData - Form data to sync to URL
- */
-export const updateUrlParams = (formData) => {
-  const params = new URLSearchParams();
-  params.set(URL_PARAMS.UNIT, formData.outputUnit);
-  params.set(URL_PARAMS.ROOT, formData.rootFontSize.toString());
-  params.set(URL_PARAMS.MIN, formData.minSize.toString());
-  params.set(URL_PARAMS.MAX, formData.maxSize.toString());
-  params.set(URL_PARAMS.MIN_SCREEN, formData.minScreenWidth.toString());
-  params.set(URL_PARAMS.MAX_SCREEN, formData.maxScreenWidth.toString());
-
-  const newUrl = `${window.location.pathname}?${params.toString()}`;
-  window.history.replaceState({}, '', newUrl);
-};
-
-/**
- * Generate a shareable URL with current form data
- * @param {Object} formData - Current form data
- * @returns {string} Shareable URL
- */
-export const generateShareUrl = (formData) => {
-  const currentUrl = window.location.origin + window.location.pathname;
-  const params = new URLSearchParams();
-  params.set(URL_PARAMS.UNIT, formData.outputUnit);
-  params.set(URL_PARAMS.ROOT, formData.rootFontSize.toString());
-  params.set(URL_PARAMS.MIN, formData.minSize.toString());
-  params.set(URL_PARAMS.MAX, formData.maxSize.toString());
-  params.set(URL_PARAMS.MIN_SCREEN, formData.minScreenWidth.toString());
-  params.set(URL_PARAMS.MAX_SCREEN, formData.maxScreenWidth.toString());
-
-  return `${currentUrl}?${params.toString()}`;
-};
 
 /**
  * Clamp calculation utilities
@@ -275,19 +221,33 @@ export const createCustomBreakpoint = (data) => {
  * @returns {string} Media query fallback CSS
  */
 const generateMediaQueryFallback = (data, minFormatted, maxFormatted, outputUnit) => {
-  const { minScreenWidth, maxScreenWidth } = data;
+  const { minScreenWidth, maxScreenWidth, minSize, maxSize, rootFontSize } = data;
+  const minScreen = parseFloat(minScreenWidth);
+  const maxScreen = parseFloat(maxScreenWidth);
+  const root = parseFloat(rootFontSize) || 16;
+
+  const minSizeNum = parseFloat(minSize);
+  const maxSizeNum = parseFloat(maxSize);
+  const minPx = outputUnit === 'rem' ? minSizeNum * root : minSizeNum;
+  const maxPx = outputUnit === 'rem' ? maxSizeNum * root : maxSizeNum;
+  const slope = (maxPx - minPx) / (maxScreen - minScreen);
+  const intercept = minPx - (slope * minScreen);
+
+  const slopeInUnit = outputUnit === 'rem' ? slope / root : slope;
+  const interceptInUnit = outputUnit === 'rem' ? intercept / root : intercept;
+  const fluidValue = `calc(${formatNumber(slopeInUnit * 100)}vw + ${formatNumber(interceptInUnit)}${outputUnit})`;
 
   return `/* Fallback for browsers that don't support clamp() */
 @supports not (font-size: clamp(1rem, 1vw, 1rem)) {
-  /* Mobile: use minimum value */
+  /* Below minimum breakpoint */
   font-size: ${minFormatted}${outputUnit};
   
-  /* Tablet and up: use maximum value */
+  /* Fluid scaling between breakpoints */
   @media (min-width: ${minScreenWidth}px) {
-    font-size: ${maxFormatted}${outputUnit};
+    font-size: ${fluidValue};
   }
   
-  /* Large screens: ensure maximum value */
+  /* Cap at maximum value */
   @media (min-width: ${maxScreenWidth}px) {
     font-size: ${maxFormatted}${outputUnit};
   }
@@ -315,4 +275,3 @@ const generateCustomPropertiesCSS = (propName, cssClamp, data) => {
   font-size: var(--${propName});
 }`;
 };
-
