@@ -24,23 +24,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   color-scheme: light;
-  background:
+  background-image:
     linear-gradient(100deg, rgba(96, 165, 250, 0.45) 0%, rgba(167, 139, 250, 0.38) 45%, rgba(251, 146, 60, 0.35) 100%),
     radial-gradient(1000px 500px at 15% 85%, rgba(255, 255, 255, 0.35) 0%, transparent 55%),
     radial-gradient(900px 450px at 85% 85%, rgba(148, 163, 184, 0.22) 0%, transparent 60%),
     linear-gradient(180deg, #dbeafe 0%, #e2e8f0 100%);
+  background-image: url('/mac-bg-1.jpg');
   background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
 }
 
 // ===== DARK MODE =====
 @media (prefers-color-scheme: dark) {
-  body {
-    background:
-      linear-gradient(100deg, rgba(30, 41, 59, 0.92) 0%, rgba(51, 65, 85, 0.88) 50%, rgba(15, 23, 42, 0.95) 100%),
-      radial-gradient(900px 500px at 30% 80%, rgba(99, 102, 241, 0.2) 0%, transparent 60%),
-      linear-gradient(180deg, #0f172a 0%, #111827 100%);
-    background-attachment: fixed;
-  }
+  body {}
 }
 
 .app {
@@ -48,7 +45,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
-  max-width: 1240px;
+  max-width: 1440px;
   margin: 0 auto;
   width: 100%;
 }

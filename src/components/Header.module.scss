@@ -47,14 +47,9 @@
 }
 
 .logo {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  margin: 0;
+  font-size: clamp(20px, calc(0.588vw + 17.529px), 26px);
+  line-height: 1;
   white-space: nowrap;
 }
 

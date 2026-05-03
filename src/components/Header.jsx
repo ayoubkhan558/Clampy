@@ -27,9 +27,8 @@ const Header = () => {
           {/* Logo/Brand */}
           <div className={styles.brand}>
             <div>
-              <img className={styles.logoImage} src="/logo.svg" alt="Clampy" />
               <h1 className={styles.logo}>Clampy</h1>
-              <p className={styles.tagline}>Generate production-ready responsive clamp() styles instantly.</p>
+              {/* <p className={styles.tagline}>Generate production-ready responsive clamp() styles instantly.</p> */}
             </div>
           </div>
 
