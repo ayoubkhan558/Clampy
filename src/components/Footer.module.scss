@@ -10,12 +10,23 @@
   backdrop-filter: blur(10px);
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
 .content {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: var(--space-4);
-  margin-bottom: var(--space-6);
-  text-align: center;
+  text-align: left;
+  flex-direction: column;
+
+  @include md {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 
 .brand {
@@ -33,12 +44,13 @@
   @include fluid-font-size(14, 16, 320, 1200, 'px');
   color: var(--text-secondary);
   line-height: 1.5;
-  margin: 0 0 var(--space-4) 0;
+  margin: 0 0 var(--space-3) 0;
+  max-width: 520px;
 }
 
 .socialLinks {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
 }
 
@@ -111,7 +123,7 @@
 .bottom {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding-top: var(--space-4);
   border-top: 1px solid var(--border-primary);
   gap: var(--space-4);

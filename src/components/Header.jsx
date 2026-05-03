@@ -21,7 +21,11 @@ const Header = () => {
         <div className={styles.container}>
           {/* Logo/Brand */}
           <div className={styles.brand}>
-            <h1 className={styles.logo}>Clampy</h1>
+            <div>
+              <p className={styles.badge}>Fluid CSS Toolkit</p>
+              <h1 className={styles.logo}>Clampy</h1>
+              <p className={styles.tagline}>Generate production-ready responsive clamp() styles instantly.</p>
+            </div>
           </div>
 
           {/* Navigation (always visible, stacked on small screens) */}
