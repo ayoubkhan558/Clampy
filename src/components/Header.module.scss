@@ -47,11 +47,21 @@
 }
 
 .logo {
-  @include fluid-font-size(24, 28, 320, 1200, 'px');
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary-hover);
-  margin: 2px 0 0;
-  line-height: 1;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.logoImage {
+  height: 34px;
+  width: auto;
+  display: block;
 }
 
 .tagline {
