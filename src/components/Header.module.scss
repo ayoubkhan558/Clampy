@@ -5,9 +5,9 @@
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-primary);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(10px);
 }
 
 .container {
@@ -34,7 +34,7 @@
 .logo {
   @include fluid-font-size(24, 28, 320, 1200, 'px');
   font-weight: var(--font-weight-bold);
-  color: var(--accent-primary);
+  color: var(--color-primary-hover);
   margin: 0;
   line-height: 1;
 }
@@ -66,7 +66,7 @@
   font-family: inherit;
 
   @include fluid-font-size(14, 16, 320, 1200, 'px');
-  color: var(--text-primary);
+  color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
   padding: 8px 12px;
@@ -75,8 +75,8 @@
   position: relative;
 
   &:hover {
-    color: var(--accent-primary);
-    background: var(--bg-secondary);
+    color: var(--color-primary-hover);
+    background: rgba(99, 102, 241, 0.1);
   }
 
   &:focus {

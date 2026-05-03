@@ -14,7 +14,7 @@ html {
 
 body {
   margin: 0;
-  @include fluid-padding(16, 24, 320, 1200, 'px');
+  @include fluid-padding(12, 20, 320, 1200, 'px');
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
@@ -23,14 +23,22 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background-image: linear-gradient(-225deg, #69EACB 0%, #EACCF8 48%, #6654F1 100%);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.18) 0%, transparent 38%),
+    radial-gradient(circle at 85% 15%, rgba(16, 185, 129, 0.14) 0%, transparent 42%),
+    radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.12) 0%, transparent 36%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  background-attachment: fixed;
 }
 
 // ===== DARK MODE =====
 @media (prefers-color-scheme: dark) {
   body {
-    background-blend-mode: multiply;
-    background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);
+    background:
+      radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.28) 0%, transparent 38%),
+      radial-gradient(circle at 80% 18%, rgba(168, 85, 247, 0.2) 0%, transparent 40%),
+      linear-gradient(180deg, #0b1220 0%, #111827 100%);
+    background-attachment: fixed;
   }
 }
 
@@ -45,4 +53,5 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: var(--space-4);
 }
