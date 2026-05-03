@@ -37,7 +37,7 @@
 
 .formCard,
 .outputCard {
-  background: rgba(255, 255, 255, 0.62);
+  background: rgba(255, 255, 255, 0.78);
   border-radius: 20px;
   // Mobile-first compact padding, scale up with breakpoints
   padding: 16px;
@@ -46,6 +46,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(18px) saturate(1.2);
+  color: #0f172a;
 
   @include sm {
     padding: 20px;
@@ -600,7 +601,7 @@
   @include fluid-font-size(14, 16, 320, 1200, 'px');
   background: transparent;
   border: 1px solid transparent;
-  color: var(--text-secondary);
+  color: #475569;
   cursor: pointer;
   transition: var(--transition-base);
   font-weight: 500;
@@ -613,8 +614,8 @@
   min-height: 40px;
 
   &:hover:not(.tabActive) {
-    background: var(--color-primary);
-    color: var(--text-primary);
+    background: rgba(99, 102, 241, 0.1);
+    color: #1e293b;
   }
 
   &:focus {
@@ -626,6 +627,7 @@
   background: rgba(255, 255, 255, 0.9);
   color: var(--color-primary-hover);
   border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
 
   &:hover {
     background: var(--bg-primary);
