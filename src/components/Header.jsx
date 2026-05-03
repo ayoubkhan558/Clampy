@@ -19,9 +19,17 @@ const Header = () => {
     <>
       <header className={styles.header}>
         <div className={styles.container}>
+          <div className={styles.trafficLights} aria-hidden="true">
+            <span className={`${styles.dot} ${styles.dotRed}`}></span>
+            <span className={`${styles.dot} ${styles.dotYellow}`}></span>
+            <span className={`${styles.dot} ${styles.dotGreen}`}></span>
+          </div>
           {/* Logo/Brand */}
           <div className={styles.brand}>
-            <h1 className={styles.logo}>Clampy</h1>
+            <div>
+              <h1 className={styles.logo}>Clampy</h1>
+              {/* <p className={styles.tagline}>Generate production-ready responsive clamp() styles instantly.</p> */}
+            </div>
           </div>
 
           {/* Navigation (always visible, stacked on small screens) */}

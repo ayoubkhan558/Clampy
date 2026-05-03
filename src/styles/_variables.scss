@@ -1,3 +1,6 @@
+@use 'sass:math';
+@use 'sass:meta';
+
 /**
  * CSS Variables - Design System Foundation
  * Centralized design tokens for consistent theming across the application
@@ -14,11 +17,11 @@
   --bg-secondary: rgba(250, 250, 250, 0.85);
   --bg-secondary-alt: rgba(250, 250, 250, 0.96);
   --bg-surface: var(--color-surface);
-  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card: rgba(255, 255, 255, 0.92);
 
   // Text Colors
   --color-text: hsl(220.9 22.7% 11.4%);
-  --color-text-secondary: hsl(215.4 19.3% 34.5%);
+  --color-text-secondary: hsl(218 18% 30%);
 
   // Primary / Accent Colors
   --color-primary: hsl(221.2 83.2% 53.3%);
@@ -155,23 +158,23 @@
 // ===== DARK MODE =====
 @media (prefers-color-scheme: dark) {
   :root {
-    // Background Colors
-    --color-background: hsl(220.9 22.7% 11.4%);
-    --color-background-secondary: hsl(216.9 19.1% 16.5%);
-    --color-surface: hsl(215.3 25% 26.7%);
-    --bg-card: rgba(0, 0, 0, 0.85);
-    --bg-secondary: rgba(46, 46, 46, 0.85);
+    // Keep mac-light glass palette even when OS is dark
+    --color-background: hsl(214 44% 92%);
+    --color-background-secondary: hsl(214 40% 90%);
+    --color-surface: hsl(0 0% 100%);
+    --bg-card: rgba(255, 255, 255, 0.86);
+    --bg-secondary: rgba(255, 255, 255, 0.7);
 
-    // Text Colors
-    --color-text: hsl(210 40% 98%);
-    --color-text-secondary: hsl(212.7 26.8% 83.9%);
+    // Text Colors (dark for readability)
+    --color-text: hsl(220.9 22.7% 11.4%);
+    --color-text-secondary: hsl(218 18% 30%);
 
     // Primary / Accent Colors
     --color-primary: hsl(217.2 91.2% 59.8%);
     --color-primary-hover: hsl(217.2 91.2% 54.8%);
 
     // Border Colors
-    --color-border: hsl(215.4 19.3% 34.5%);
+    --color-border: hsl(214.3 31.8% 82%);
 
     // Status Colors
     --color-success: hsl(142.1 70.2% 46.3%);
@@ -238,8 +241,8 @@ $breakpoint-2xl: 1440px;
 
 // Helper function to strip units from values
 @function strip-unit($value) {
-  @if type-of($value) == 'number' and not unitless($value) {
-    @return $value / ($value * 0 + 1);
+  @if meta.type-of($value) == 'number' and not math.is-unitless($value) {
+    @return math.div($value, ($value * 0 + 1));
   }
   @return $value;
 }

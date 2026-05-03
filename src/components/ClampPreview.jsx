@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './ClampPreview.module.scss';
 import { HiDeviceMobile, HiDeviceTablet, HiDesktopComputer } from 'react-icons/hi';
 
-const ClampPreview = ({ formData, clampValue, outputs }) => {
+const ClampPreview = ({ formData, outputs }) => {
   const [viewportWidth, setViewportWidth] = useState(375);
   const [isDragging, setIsDragging] = useState(false);
   const [currentFontSize, setCurrentFontSize] = useState(0);
   const [customText, setCustomText] = useState('The quick brown fox jumps over the lazy dog');
+  const sliderRef = useRef(null);
 
   // Calculate current font size based on viewport width
   useEffect(() => {
     if (!formData || !outputs.cssClamp) return;
     
-    const { minSize, maxSize, minScreenWidth, maxScreenWidth, outputUnit, rootFontSize } = formData;
+    const { minSize, maxSize, minScreenWidth, maxScreenWidth } = formData;
     const minScreen = parseFloat(minScreenWidth);
     const maxScreen = parseFloat(maxScreenWidth);
     const minSizeNum = parseFloat(minSize);
     const maxSizeNum = parseFloat(maxSize);
-    const rootSizeNum = parseFloat(rootFontSize) || 16;
     
     // Calculate linear interpolation
     const slope = (maxSizeNum - minSizeNum) / (maxScreen - minScreen);
@@ -56,7 +56,8 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (isDragging) {
-        const slider = document.querySelector(`.${styles.sliderContainer} input`);
+        const slider = sliderRef.current;
+        if (!slider) return;
         const rect = slider.getBoundingClientRect();
         const min = parseInt(slider.min, 10);
         const max = parseInt(slider.max, 10);
@@ -91,6 +92,7 @@ const ClampPreview = ({ formData, clampValue, outputs }) => {
             <span>{formData.maxScreenWidth}px</span>
           </div>
           <input
+            ref={sliderRef}
             type="range"
             min={formData.minScreenWidth}
             max={formData.maxScreenWidth}

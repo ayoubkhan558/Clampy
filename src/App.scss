@@ -14,7 +14,7 @@ html {
 
 body {
   margin: 0;
-  @include fluid-padding(16, 24, 320, 1200, 'px');
+  @include fluid-padding(12, 20, 320, 1200, 'px');
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
@@ -23,26 +23,36 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background-image: linear-gradient(-225deg, #69EACB 0%, #EACCF8 48%, #6654F1 100%);
+  color-scheme: light;
+  background-image:
+    linear-gradient(100deg, rgba(96, 165, 250, 0.45) 0%, rgba(167, 139, 250, 0.38) 45%, rgba(251, 146, 60, 0.35) 100%),
+    radial-gradient(1000px 500px at 15% 85%, rgba(255, 255, 255, 0.35) 0%, transparent 55%),
+    radial-gradient(900px 450px at 85% 85%, rgba(148, 163, 184, 0.22) 0%, transparent 60%),
+    linear-gradient(180deg, #dbeafe 0%, #e2e8f0 100%);
+  background-image: url('/mac-bg-1.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
 }
 
 // ===== DARK MODE =====
 @media (prefers-color-scheme: dark) {
-  body {
-    background-blend-mode: multiply;
-    background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);
-  }
+  body {}
 }
 
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-5);
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: var(--space-4);
 }

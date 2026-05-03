@@ -39,11 +39,16 @@ const FormField = ({ label, children, error }) => (
  */
 const CodeOutput = ({ title, code, onCopy }) => {
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
 
-  const handleCopy = () => {
-    onCopy(code, title);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    const success = await onCopy(code, title);
+    setCopied(success);
+    setCopyFailed(!success);
+    setTimeout(() => {
+      setCopied(false);
+      setCopyFailed(false);
+    }, 2000);
   };
 
   return (
@@ -52,11 +57,11 @@ const CodeOutput = ({ title, code, onCopy }) => {
         <h3 className={styles.outputLabel}>{title}</h3>
         <button
           onClick={handleCopy}
-          className={`${styles.copyButton} ${copied ? styles.copied : ''}`}
+          className={`${styles.copyButton} ${copied ? styles.copied : ''} ${copyFailed ? styles.copyFailed : ''}`}
           title="Copy to clipboard"
         >
           <IoMdCopy className={styles.buttonIcon} />
-          {copied ? 'Copied!' : 'Copy'}
+          {copied ? 'Copied!' : copyFailed ? 'Failed' : 'Copy'}
         </button>
       </div>
       <pre className={styles.codeBlock}>
@@ -166,14 +171,20 @@ const ClampGenerator = () => {
 
   // Active tab state
   const [activeTab, setActiveTab] = useState('code');
+  const [clipboardStatus, setClipboardStatus] = useState(null);
 
   // Get outputs from calculations
   const outputs = useClampCalculations(formData, isValid, customBreakpoints);
 
   // Event handlers
-  const handleShareLink = () => {
+  const handleShareLink = async () => {
     const shareUrl = generateShareUrl(formData);
-    copyToClipboard(shareUrl, 'Share Link');
+    const success = await copyToClipboard(shareUrl, 'Share Link');
+    setClipboardStatus({
+      type: success ? 'success' : 'error',
+      message: success ? 'Share link copied to clipboard.' : 'Failed to copy share link.'
+    });
+    setTimeout(() => setClipboardStatus(null), 2500);
   };
 
   const onAddBreakpoint = (data) => {
@@ -186,8 +197,14 @@ const ClampGenerator = () => {
     resetBreakpoint();
   };
 
-  const handleCopyCode = (code, type) => {
-    copyToClipboard(code, type);
+  const handleCopyCode = async (code, type) => {
+    const success = await copyToClipboard(code, type);
+    setClipboardStatus({
+      type: success ? 'success' : 'error',
+      message: success ? `${type} copied to clipboard.` : `Failed to copy ${type}.`
+    });
+    setTimeout(() => setClipboardStatus(null), 2500);
+    return success;
   };
 
   return (
@@ -406,6 +423,15 @@ const ClampGenerator = () => {
                         <HiShare className={styles.buttonIcon} />
                         Share Link
                       </button>
+                      {clipboardStatus && (
+                        <p
+                          className={`${styles.clipboardStatus} ${clipboardStatus.type === 'success' ? styles.clipboardStatusSuccess : styles.clipboardStatusError}`}
+                          role="status"
+                          aria-live="polite"
+                        >
+                          {clipboardStatus.message}
+                        </p>
+                      )}
                       <div className={styles.codeOutputs}>
                         {outputs.cssClamp && (
                           <CodeOutput

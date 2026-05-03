@@ -1,4 +1,4 @@
-.error-boundary {
+.errorBoundary {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -7,7 +7,7 @@
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.error-boundary__content {
+.content {
     background: white;
     padding: 3rem;
     border-radius: 1rem;
@@ -16,19 +16,19 @@
     text-align: center;
 }
 
-.error-boundary__content h1 {
+.content h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
     color: #333;
 }
 
-.error-boundary__content p {
+.content p {
     font-size: 1.1rem;
     color: #666;
     margin-bottom: 2rem;
 }
 
-.error-boundary__details {
+.details {
     text-align: left;
     margin: 2rem 0;
     padding: 1rem;
@@ -37,14 +37,14 @@
     border: 1px solid #e0e0e0;
 }
 
-.error-boundary__details summary {
+.details summary {
     cursor: pointer;
     font-weight: 600;
     color: #667eea;
     margin-bottom: 1rem;
 }
 
-.error-boundary__stack {
+.stack {
     font-family: 'Courier New', monospace;
     font-size: 0.85rem;
     color: #d32f2f;
@@ -53,13 +53,13 @@
     word-wrap: break-word;
 }
 
-.error-boundary__actions {
+.actions {
     display: flex;
     gap: 1rem;
     justify-content: center;
 }
 
-.error-boundary__button {
+.button {
     padding: 0.75rem 2rem;
     border: none;
     border-radius: 0.5rem;
@@ -69,23 +69,23 @@
     transition: all 0.3s ease;
 }
 
-.error-boundary__button--primary {
+.buttonPrimary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
 }
 
-.error-boundary__button--primary:hover {
+.buttonPrimary:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-.error-boundary__button--secondary {
+.buttonSecondary {
     background: white;
     color: #667eea;
     border: 2px solid #667eea;
 }
 
-.error-boundary__button--secondary:hover {
+.buttonSecondary:hover {
     background: #f5f7ff;
     transform: translateY(-2px);
 }

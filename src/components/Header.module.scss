@@ -1,29 +1,44 @@
-@import '../styles/clamp';
-@import '../styles/variables';
+@use '../styles/clamp' as *;
+@use '../styles/variables' as *;
 
 .header {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
   padding: var(--space-5);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-primary);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px) saturate(1.2);
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-4);
   align-items: center;
-  justify-content: center;
 
   @include md {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
+    gap: var(--space-5);
   }
 }
+
+.trafficLights {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.dotRed { background: #ff5f57; }
+.dotYellow { background: #ffbd2f; }
+.dotGreen { background: #28c840; }
 
 .brand {
   display: flex;
@@ -32,24 +47,30 @@
 }
 
 .logo {
-  @include fluid-font-size(24, 28, 320, 1200, 'px');
-  font-weight: var(--font-weight-bold);
-  color: var(--accent-primary);
   margin: 0;
+  font-size: clamp(20px, calc(0.588vw + 17.529px), 26px);
   line-height: 1;
+  white-space: nowrap;
+}
+
+.logoImage {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+
+.tagline {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
 
 .nav {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  flex-direction: column;
-
-  @include md {
-    flex-direction: row;
-    gap: var(--space-6);
-  }
+  justify-content: flex-end;
+  gap: var(--space-6);
 }
 
 .navLinks {
@@ -66,17 +87,18 @@
   font-family: inherit;
 
   @include fluid-font-size(14, 16, 320, 1200, 'px');
-  color: var(--text-primary);
+  color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-md);
   transition: var(--transition-base);
   position: relative;
 
   &:hover {
-    color: var(--accent-primary);
-    background: var(--bg-secondary);
+    color: var(--color-primary-hover);
+    background: rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
   }
 
   &:focus {

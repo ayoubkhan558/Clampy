@@ -1,21 +1,32 @@
-@import '../styles/clamp';
-@import '../styles/variables';
+@use '../styles/clamp' as *;
+@use '../styles/variables' as *;
 
 .footer {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.62);
+  border-radius: 18px;
   padding: var(--space-5);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-primary);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px) saturate(1.2);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 }
 
 .content {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: var(--space-4);
-  margin-bottom: var(--space-6);
-  text-align: center;
+  text-align: left;
+  flex-direction: column;
+
+  @include md {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 
 .brand {
@@ -24,7 +35,7 @@
 .brandName {
   @include fluid-font-size(20, 24, 320, 1200, 'px');
   font-weight: var(--font-weight-bold);
-  color: var(--accent-primary);
+  color: var(--color-primary-hover);
   margin: 0 0 var(--space-2) 0;
   line-height: 1.2;
 }
@@ -33,12 +44,13 @@
   @include fluid-font-size(14, 16, 320, 1200, 'px');
   color: var(--text-secondary);
   line-height: 1.5;
-  margin: 0 0 var(--space-4) 0;
+  margin: 0 0 var(--space-3) 0;
+  max-width: 520px;
 }
 
 .socialLinks {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
 }
 
@@ -48,8 +60,8 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-primary);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: var(--radius-md);
   color: var(--text-secondary);
   text-decoration: none;
@@ -57,9 +69,9 @@
   font-size: 18px;
 
   &:hover {
-    color: var(--accent-primary);
-    background: var(--color-primary);
-    border-color: var(--accent-primary);
+    color: var(--color-primary-hover);
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.45);
     transform: translateY(-2px);
   }
 
@@ -111,7 +123,7 @@
 .bottom {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding-top: var(--space-4);
   border-top: 1px solid var(--border-primary);
   gap: var(--space-4);

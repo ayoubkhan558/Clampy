@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createCustomBreakpoint } from '../utils/breakpointUtils';
+import { createCustomBreakpoint, getDeviceCategory } from '../utils/breakpointUtils';
 
 /**
  * Custom hook for managing breakpoint state and operations
@@ -14,6 +14,9 @@ export const useBreakpoints = () => {
    */
   const handleAddBreakpoint = (data) => {
     const customBp = createCustomBreakpoint(data);
+    if (!customBp) {
+      return null;
+    }
     setCustomBreakpoints(prev => [...prev, customBp]);
     setShowAddBreakpoint(false);
     return customBp;
@@ -23,6 +26,12 @@ export const useBreakpoints = () => {
    * Update breakpoint (handles both custom and default breakpoints)
    */
   const handleUpdateBreakpoint = (id, data) => {
+    const parsedWidth = parseInt(data.width, 10);
+    if (Number.isNaN(parsedWidth)) {
+      return;
+    }
+    const { category, icon } = getDeviceCategory(parsedWidth);
+
     setCustomBreakpoints(prev => {
       // Check if this is already a custom breakpoint (starts with 'custom-')
       const isCustomBreakpoint = id.startsWith('custom-');
@@ -34,8 +43,10 @@ export const useBreakpoints = () => {
             return {
               ...bp,
               name: data.name,
-              width: parseInt(data.width),
-              device: data.device
+              width: parsedWidth,
+              device: data.device,
+              category,
+              icon
             };
           }
           return bp;
@@ -53,8 +64,10 @@ export const useBreakpoints = () => {
               return {
                 ...bp,
                 name: data.name,
-                width: parseInt(data.width),
-                device: data.device
+                width: parsedWidth,
+                device: data.device,
+                category,
+                icon
               };
             }
             return bp;
@@ -65,6 +78,9 @@ export const useBreakpoints = () => {
             ...data,
             originalId: id // Keep track of the original default breakpoint
           });
+          if (!newCustomBp) {
+            return prev;
+          }
           return [...prev, newCustomBp];
         }
       }
