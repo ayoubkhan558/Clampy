@@ -2,7 +2,7 @@
 @use '../styles/variables' as *;
 
 .footer {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(30px) saturate(1.2);
   border-radius: 18px;
   padding: var(--space-5);
@@ -29,8 +29,7 @@
   }
 }
 
-.brand {
-}
+.brand {}
 
 .brandName {
   @include fluid-font-size(20, 24, 320, 1200, 'px');
