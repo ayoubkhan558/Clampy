@@ -2,12 +2,12 @@
 @use '../styles/variables' as *;
 
 .footer {
-  background: rgba(255, 255, 255, 0.62);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px) saturate(1.2);
   border-radius: 18px;
   padding: var(--space-5);
   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(16px) saturate(1.2);
 }
 
 .container {
@@ -42,7 +42,8 @@
 
 .brandDescription {
   @include fluid-font-size(14, 16, 320, 1200, 'px');
-  color: var(--text-secondary);
+  // color: var(--text-secondary);
+  color: #000;
   line-height: 1.5;
   margin: 0 0 var(--space-3) 0;
   max-width: 520px;
@@ -136,7 +137,7 @@
 
 .copyright {
   @include fluid-font-size(13, 14, 320, 1200, 'px');
-  color: var(--text-secondary);
+  color: #000;
   margin: 0;
 
   p {
